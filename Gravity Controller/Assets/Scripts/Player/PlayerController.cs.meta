@@ -3,7 +3,15 @@ guid: 135e4bfde9966481392170ed0315b20f
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _gunGameObject: {instanceID: 0}
+  - _sparkParticle: {instanceID: 0}
+  - _fireSound: {fileID: 8300000, guid: 87bc6e587628c1b4ab5c0820da51f381, type: 3}
+  - _reloadSound: {instanceID: 0}
+  - _hitSound: {instanceID: 0}
+  - _globalGravityUpSound: {instanceID: 0}
+  - _globalGravityDownSound: {instanceID: 0}
+  - _localGravitySound: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
