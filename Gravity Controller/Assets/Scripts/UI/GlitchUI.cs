@@ -11,6 +11,7 @@ public class GlitchUI : MonoBehaviour
 
 	[SerializeField] private AudioSource _audioSource;    
 	[SerializeField] private AudioClip _glitchSound;
+	[SerializeField] private float _glitchSoundMaxVolume = 1f;
 
 	private bool _isGlitching = false;
 
@@ -34,6 +35,7 @@ public class GlitchUI : MonoBehaviour
 		{
 			if (_audioSource != null && _glitchSound != null)
 			{
+				_audioSource.volume = _glitchSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 				_audioSource.PlayOneShot(_glitchSound);
 			}
 

@@ -17,6 +17,7 @@ public class ClearCore : MonoBehaviour, IInteractable
 
 	[SerializeField] private AudioSource _audioSource;
 	[SerializeField] private AudioClip _coreSound;
+	[SerializeField] private float _coreSoundMaxVolume = 1f;
 
 	void Start()
 	{
@@ -120,6 +121,7 @@ public class ClearCore : MonoBehaviour, IInteractable
 
 			if (_audioSource != null && _coreSound != null)
 			{
+				_audioSource.volume = _coreSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 				_audioSource.PlayOneShot(_coreSound);
 			}
 		}

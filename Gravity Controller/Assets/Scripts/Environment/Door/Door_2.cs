@@ -16,6 +16,7 @@ public class Door_2 : MonoBehaviour, IDoor
 
 	[SerializeField] private AudioSource _audioSource;
 	[SerializeField] private AudioClip _doorSound;
+	[SerializeField] private float _doorSoundMaxVolume = 1f;
 
 	void Start()
     {
@@ -57,6 +58,7 @@ public class Door_2 : MonoBehaviour, IDoor
         if(_isOpened) {
             return;
         }
+		_audioSource.volume = _doorSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_doorSound);
 		_isOpened = true;
         _animator.SetBool("Open", true);
@@ -67,6 +69,7 @@ public class Door_2 : MonoBehaviour, IDoor
         if(!_isOpened) {
             return;
         }
+		_audioSource.volume = _doorSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_doorSound);
 		_isOpened = false;
         _animator.SetBool("Open", false);

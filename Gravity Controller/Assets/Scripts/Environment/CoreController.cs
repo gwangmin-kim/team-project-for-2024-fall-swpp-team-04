@@ -32,6 +32,9 @@ public class CoreController : MonoBehaviour, IInteractable
 	[SerializeField] private AudioClip _lightSound;
 	[SerializeField] private AudioClip _coreSound;
 
+	[SerializeField] private float _lightSoundMaxVolume = 1f;
+	[SerializeField] private float _coreSoundMaxVolume = 1f;
+
 	// Start is called before the first frame update
 	void Start()
     {
@@ -49,6 +52,7 @@ public class CoreController : MonoBehaviour, IInteractable
     public void Interactive() {
         if(_isInteractable) {
 			_isInteractable = false;
+			_audioSource.volume = _lightSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 			_audioSource.PlayOneShot(_lightSound);
 			StartCoroutine(GlobalLightOn());
         }
@@ -96,6 +100,7 @@ public class CoreController : MonoBehaviour, IInteractable
         }
         _batteries[stage].materials[1] = _blueEmission;
         _batteryLights[stage].intensity = _batteryLightIntensity;
+		_audioSource.volume = _coreSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_coreSound);
 	}
     public bool IsInteractable()

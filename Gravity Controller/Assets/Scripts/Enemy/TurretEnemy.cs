@@ -81,6 +81,10 @@ public class TurretEnemy : MonoBehaviour, IEnemy, ISkillReceiver
 	[SerializeField] private AudioClip _chargingSound;
 	[SerializeField] private AudioClip _attackingSound;
 
+	[SerializeField] private float _workingSoundMaxVolume = 1f;
+	[SerializeField] private float _chargingSoundMaxVolume = 1f;
+	[SerializeField] private float _attackingSoundMaxVolume = 1f;
+
 	private bool _isCharging = false;
 	private bool _headDetached = false;
 	private bool _isRestoring = false;
@@ -131,6 +135,7 @@ public class TurretEnemy : MonoBehaviour, IEnemy, ISkillReceiver
 
 		_audioSource.clip = _workingSound;
 		_audioSource.loop = true;
+		_audioSource.volume = _workingSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.Play();
 
 		_centralRotation = _column.rotation;
@@ -334,6 +339,7 @@ public class TurretEnemy : MonoBehaviour, IEnemy, ISkillReceiver
 	}
 
 	private IEnumerator ChargeAndFire() {
+		_audioSource.volume = _chargingSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_chargingSound);
 		yield return new WaitForSeconds(_chargeTime);
 
@@ -356,6 +362,7 @@ public class TurretEnemy : MonoBehaviour, IEnemy, ISkillReceiver
 
 		Vector3 directionToPlayer = _column.rotation * new Vector3(0, 0, 1);
 
+		_audioSource.volume = _attackSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_attackingSound);
 
 		// proj.transform.rotation = Quaternion.LookRotation(directionToPlayer);
