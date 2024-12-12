@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33925860b059ecd48ad93788a99f0fde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _projectile: {fileID: 0}
+  _projectile: {fileID: 122154, guid: 3517d6179b17d7d41b2ab3881cb2cd67, type: 3}
   _projectileSpeed: 5
   _wanderSpeed: 3
   _wanderRange: 7
@@ -89,9 +89,9 @@ MonoBehaviour:
   _homingInstinct: 1.5
   _angularSpeed: 0.2
   _amplitude: 0.2
-  _chaseRangeHorizontal: 30
-  _chaseRangeVertical: 15
-  _sightRange: 15
+  _chaseRangeHorizontal: 300
+  _chaseRangeVertical: 300
+  _sightRange: 300
   _awarenessCoolDown: 3
   _rotationSpeed: 10
   _attackRangeHorizontal: 10

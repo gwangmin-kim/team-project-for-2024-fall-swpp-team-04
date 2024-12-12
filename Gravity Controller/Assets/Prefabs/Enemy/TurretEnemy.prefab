@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 5072182162371140193}
   m_Layer: 0
   m_Name: TurretEnemy
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _headVerticalLimitRate: 0.7
-  _projectile: {fileID: 0}
+  _projectile: {fileID: 122154, guid: 3517d6179b17d7d41b2ab3881cb2cd67, type: 3}
   _projectileSpeed: 20
   _rotationDirection: 1
   _rotationSpeedHorizontal: 5

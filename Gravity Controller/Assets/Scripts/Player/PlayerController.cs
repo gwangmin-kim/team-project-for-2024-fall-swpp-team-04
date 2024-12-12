@@ -175,7 +175,6 @@ public class PlayerController : MonoBehaviour
         if(_currentBullet-- > 0) {
             _isShootable = false;
 			_audioSource.PlayOneShot(_fireSound);
-			Debug.Log("fire");
             _gunGameObject.SendMessage("HandleRecoil", SendMessageOptions.DontRequireReceiver);
 			RaycastHit hit;
             if(Physics.Raycast(_camera.position, _camera.transform.forward, out hit)) {
@@ -184,7 +183,6 @@ public class PlayerController : MonoBehaviour
 				var targetAttackReceiver = hit.collider.gameObject.GetComponent<IAttackReceiver>();
 				if (targetAttackReceiver != null)
 				{
-					Debug.Log("Fire: enemy detected");
 					targetAttackReceiver.OnHit();
                 }
             }
@@ -198,7 +196,6 @@ public class PlayerController : MonoBehaviour
 
     // 재장전
     private void Reload() {
-		// Debug.Log("reloading...");
 		if (_isReloading) return;
 		_audioSource.PlayOneShot(_reloadSound);
 		_isReloading = true;
@@ -237,7 +234,6 @@ public class PlayerController : MonoBehaviour
 			ISkillReceiver targetSkillReceiver =  hit.collider.gameObject.GetComponent<ISkillReceiver>();
 
 			if (targetSkillReceiver != null) {
-                Debug.Log("TargetGravity: target detected");
                 _isTargetable = false;
                 StartCoroutine(ReTargetable());
                 _currentEnergy -= _localEnergyCost;
@@ -255,14 +251,12 @@ public class PlayerController : MonoBehaviour
     private IEnumerator ReTargetable() {
         yield return new WaitForSeconds(_localGravityCooldown);
         if(!_isTargetable) {
-            Debug.Log("targetable");
             _isTargetable = true;
         }
     }
     // 전체 중력 강화
     // 여러 오브젝트에 대해 루프를 돌며 작업을 수행해야 하므로 프레임 드랍을 막기 위해 코루틴으로 실행
     private void GlobalGravity(List<GameObject> gameObjects) {
-        Debug.Log("enter");
         if(_currentEnergy < _globalHighEnergyCost) {
             return;
         }
@@ -336,7 +330,6 @@ public class PlayerController : MonoBehaviour
         if(!_isAlive) {
             return;
         }
-        Debug.Log("hit");
 		_audioSource.PlayOneShot(_hitSound);
 		_currentHP--;
         UIManager.Instance.UpdateHP(_currentHP, _maxHP);
@@ -354,4 +347,11 @@ public class PlayerController : MonoBehaviour
     public float GetEnergyRatio() {
         return _currentEnergy / _maxEnergy;
     }
+
+    public void InitState()
+    {
+	    _currentHP = _maxHP;
+	    _currentBullet = _maxBullet;
+	    _currentEnergy = _maxEnergy;
+	}
 }

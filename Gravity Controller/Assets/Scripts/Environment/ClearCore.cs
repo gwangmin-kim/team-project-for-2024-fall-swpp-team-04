@@ -77,10 +77,7 @@ public class ClearCore : MonoBehaviour, IInteractable
 	/// </summary>
 	private void CheckEnemiesCleared()
 	{
-		var activeEnemies = _gameManager.GetActiveEnemies();
-		int enemyCount = activeEnemies != null ? activeEnemies.Count : 0;
-
-		if (enemyCount == 0)
+		if (_gameManager.IsClear())
 		{
 
 			if (_coreLight != null)
