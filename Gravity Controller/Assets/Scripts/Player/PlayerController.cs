@@ -122,7 +122,6 @@ public class PlayerController : MonoBehaviour
 	        {
 		        _isGravityLow = true;
 				_audioSource.clip = _globalGravityDownSound;
-				_audioSource.loop = true;
 				_audioSource.Play();
 			}
 	        else if (_mouseInputWheel < -_wheelInputThreshold)
@@ -160,7 +159,8 @@ public class PlayerController : MonoBehaviour
             if(_currentEnergy < 0) {
                 _currentEnergy = 0;
                 _isGravityLow = false;
-            }
+				_audioSource.Stop();
+			}
         } else {
             _currentEnergy += _energyRecoveryPerSec * Time.deltaTime;
             if(_currentEnergy > _maxEnergy) _currentEnergy = _maxEnergy;
