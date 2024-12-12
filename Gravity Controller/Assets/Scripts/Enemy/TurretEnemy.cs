@@ -362,7 +362,7 @@ public class TurretEnemy : MonoBehaviour, IEnemy, ISkillReceiver
 
 		Vector3 directionToPlayer = _column.rotation * new Vector3(0, 0, 1);
 
-		_audioSource.volume = _attackSoundMaxVolume * GameManager.Instance.GetSFXVolume();
+		_audioSource.volume = _attackingSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_attackingSound);
 
 		// proj.transform.rotation = Quaternion.LookRotation(directionToPlayer);
