@@ -340,6 +340,7 @@ public class PlayerController : MonoBehaviour
 		_audioSource.PlayOneShot(_hitSound);
 		_currentHP--;
         UIManager.Instance.UpdateHP(_currentHP, _maxHP);
+        UIManager.Instance.ColorPanelEffect(Color.red);
         if(_currentHP <= 0) {
             _isAlive = false;
 			SceneManager.LoadScene("GameOverScene");

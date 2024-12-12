@@ -11,7 +11,6 @@ public class UIManager : MonoBehaviour
 
 	[Header("HP")]
 	[SerializeField] private List<Image> _hpSegments;
-	[SerializeField] private float _hpBarDamping;
 
 	[Header("Energy")]
 	[SerializeField] private Image _energyGauge;
@@ -24,6 +23,12 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private RectTransform _crossHair;
 	[SerializeField] private float _defaultSize = 100f;
 	[SerializeField] private float _fireSize = 200f;
+	
+	[Header("Color Panel")]
+	[SerializeField] private Image _colorPanel;
+	[SerializeField] private float _colorPanelEffectDuration;
+	[SerializeField] private float _colorPanelEffectAlpha;
+	private float _colorPanelEffectTimer = 0f;
 
 	[Header("Core Interaction")]
 	[SerializeField] private GameObject _warningTriangle;
@@ -111,7 +116,6 @@ public class UIManager : MonoBehaviour
 		}
 	}
 
-
 	private IEnumerator PlayFullEnergyEffect()
 	{
 		float effectDuration = 1f;
@@ -127,6 +131,21 @@ public class UIManager : MonoBehaviour
 		}
 
 		_energyGauge.color = new Color(75 / 255f, 0, 130 / 255f);
+	}
+
+	public void ColorPanelEffect(Color color) {
+		_colorPanelEffectTimer = 0;
+		StartCoroutine(ColorPanelEffectCoroutine(color));
+	}
+
+	private IEnumerator ColorPanelEffectCoroutine(Color color) {
+		float t = 0;
+		while(t < 1) {
+			t = _colorPanelEffectTimer / _colorPanelEffectDuration;
+			_colorPanel.color = new Color(color.r, color.g, color.b, color.a * (1 - t) * _colorPanelEffectAlpha);
+			_colorPanelEffectTimer += Time.deltaTime;
+			yield return null;
+		}
 	}
 
 	public void UpdateBullet(int currentBullet, int maxBullet)
