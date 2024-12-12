@@ -61,6 +61,7 @@ public class CoreController : MonoBehaviour, IInteractable
         RestoreCore(_current_stage - 1);
         StartCoroutine(UIManager.Instance.ShowStageIntro(_current_stage - 1));
         _player.UpdateStage(_current_stage + 1);
+		_player.InitState();
         UIManager.Instance.EnergyGaugeUi();
 		_current_stage++;
 

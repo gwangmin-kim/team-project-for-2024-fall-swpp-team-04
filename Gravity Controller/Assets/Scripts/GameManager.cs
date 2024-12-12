@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance { get; private set; }
 	private List<GameObject> _activeEnemies = new List<GameObject>();
+	private int _enemyNumber = 0;
 
 	private void Awake()
 	{
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviour
 		{
 			_activeEnemies.Add(enemy);
 		}
+
+		if (!enemy.CompareTag("Turret")) _enemyNumber++;
 	}
 
 	public void UnregisterEnemy(GameObject enemy)
@@ -34,6 +37,8 @@ public class GameManager : MonoBehaviour
 		{
 			_activeEnemies.Remove(enemy);
 		}
+
+		if (!enemy.CompareTag("Turret")) _enemyNumber--;
 	}
 
 	public List<GameObject> GetActiveEnemies()
@@ -49,6 +54,10 @@ public class GameManager : MonoBehaviour
 	public float GetBGMVolume()
 	{
 		return 1f;
+
+	public bool IsClear()
+	{
+		return _enemyNumber==0;
 	}
 }
 
