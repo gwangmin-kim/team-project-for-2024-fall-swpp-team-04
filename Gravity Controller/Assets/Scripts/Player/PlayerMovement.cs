@@ -45,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private AudioSource _footstepAudioSource;
 	[SerializeField] private AudioClip _footstepClip;
 	[SerializeField] private float _footstepInterval = 0.5f;
+	[SerializeField] private float _footstepMaxVolume = 1.0f;
 
 	private float _footstepTimer = 0f;
 	private bool _wasFootstepConditionMet = false;
@@ -190,6 +191,7 @@ public class PlayerMovement : MonoBehaviour
 			{
 				if (_footstepAudioSource != null && _footstepClip != null)
 				{
+					_footstepAudioSource.volume = _footstepMaxVolume * GameManager.Instance.GetSFXVolume();
 					_footstepAudioSource.PlayOneShot(_footstepClip);
 				}
 				_footstepTimer = 0f;

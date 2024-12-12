@@ -89,6 +89,10 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 	[SerializeField] private AudioClip _followingSound;
 	[SerializeField] private AudioClip _attackingSound;
 
+	[SerializeField] private float _flyingSoundMaxVolume = 1f;
+	[SerializeField] private float _followingSoundMaxVolume = 1f;
+	[SerializeField] private float _attackingSoundMaxVolume = 1f;
+
 	public EnemyState State { get; private set; }
 
 	void Awake()
@@ -114,6 +118,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 		{
 			_audioSource.clip = _flyingSound;
 			_audioSource.loop = true;
+			_audioSource.volume = _flyingSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 			_audioSource.Play();
 		}
 	}
@@ -197,6 +202,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 						State = EnemyState.Follow;
 						if (_audioSource != null && _followingSound != null)
 						{
+							_audioSource.volume = _followingSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 							_audioSource.PlayOneShot(_followingSound);
 						}
 						ChasePlayer();
@@ -411,6 +417,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 
 		Vector3 directionToPlayer = (_player.transform.position - _gun.GetChild(0).position).normalized;
 
+		_audioSource.volume = _attackingSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_attackingSound);
 
 		// proj.transform.rotation = Quaternion.LookRotation(directionToPlayer);

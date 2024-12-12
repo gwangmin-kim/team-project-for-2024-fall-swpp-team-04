@@ -53,6 +53,10 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 	[SerializeField] private AudioClip _followingSound;
 	[SerializeField] private AudioClip _attackingSound;
 
+	[SerializeField] private float _walkingSoundMaxVolume = 1f;
+	[SerializeField] private float _followingSoundMaxVolume = 1f;
+	[SerializeField] private float _attackingSoundMaxVolume = 1f;
+
 	public EnemyState State { get; private set; }
 
 	void Awake()
@@ -70,6 +74,7 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 
 		_audioSource.clip = _walkingSound;
 		_audioSource.loop = true;
+		_audioSource.volume = _walkingSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.Play();
 
 		SetRandomDirection();
@@ -147,6 +152,7 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 					{
 						// Aware -> Follow
 						State = EnemyState.Follow;
+						_audioSource.volume = _followingSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 						_audioSource.PlayOneShot(_followingSound);
 						Follow();
 						break;
@@ -296,6 +302,7 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 
 	// fix: player controller가 유효한지 검사하는 과정 삭제
 	public void AttackHitCheck() {
+		_audioSource.volume = _attackingSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_attackingSound);
 		if (_attackSuccess)
 		{

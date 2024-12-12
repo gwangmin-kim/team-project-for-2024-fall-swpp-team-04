@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 		if (Instance == null)
 		{
 			Instance = this;
+			DontDestroyOnLoad(gameObject);
 		}
 		else
 		{
@@ -44,6 +45,15 @@ public class GameManager : MonoBehaviour
 	{
 		return _activeEnemies;
 	}
+
+	public float GetSFXVolume()
+	{
+		return 1f;
+	}
+
+	public float GetBGMVolume()
+	{
+		return 1f;
 
 	public bool IsClear()
 	{

@@ -68,6 +68,13 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private AudioClip _localGravitySound;
 	private AudioSource _audioSource;
 
+	[SerializeField] private float _fireSoundMaxVolume = 1f;
+	[SerializeField] private float _reloadSoundMaxVolume = 1f;
+	[SerializeField] private float _hitSoundMaxVolume = 1f;
+	[SerializeField] private float _globalGravityUpSoundMaxVolume = 1f;
+	[SerializeField] private float _globalGravityDownSoundMaxVolume = 1f;
+	[SerializeField] private float _localGravitySoundMaxVolume = 1f;
+
 
 
 	void Start() {
@@ -122,6 +129,7 @@ public class PlayerController : MonoBehaviour
 	        {
 		        _isGravityLow = true;
 				_audioSource.clip = _globalGravityDownSound;
+				_audioSource.volume = _globalGravityDownSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 				_audioSource.Play();
 			}
 	        else if (_mouseInputWheel < -_wheelInputThreshold)
@@ -174,6 +182,7 @@ public class PlayerController : MonoBehaviour
         }
         if(_currentBullet-- > 0) {
             _isShootable = false;
+			_audioSource.volume = _fireSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 			_audioSource.PlayOneShot(_fireSound);
             _gunGameObject.SendMessage("HandleRecoil", SendMessageOptions.DontRequireReceiver);
 			RaycastHit hit;
@@ -197,6 +206,7 @@ public class PlayerController : MonoBehaviour
     // 재장전
     private void Reload() {
 		if (_isReloading) return;
+		_audioSource.volume = _reloadSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_reloadSound);
 		_isReloading = true;
         _isShootable = false;
@@ -237,6 +247,7 @@ public class PlayerController : MonoBehaviour
                 _isTargetable = false;
                 StartCoroutine(ReTargetable());
                 _currentEnergy -= _localEnergyCost;
+				_audioSource.volume = _localGravitySoundMaxVolume * GameManager.Instance.GetSFXVolume();
 				_audioSource.PlayOneShot(_localGravitySound);
 
 				// 여기서 피격된 대상의 오브젝트를 불러올 수 있음
@@ -261,6 +272,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         _currentEnergy -= _globalHighEnergyCost;
+		_audioSource.volume = _globalGravityUpSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_globalGravityUpSound);
 		_gunGameObject.SendMessage("HideGunOnSkill", SendMessageOptions.DontRequireReceiver);
 		
@@ -327,15 +339,17 @@ public class PlayerController : MonoBehaviour
 
 	// 피격 시 호출(외부에서)
 	public void OnHit() {
-        if(!_isAlive) {
-            return;
-        }
-		_audioSource.PlayOneShot(_hitSound);
-		_currentHP--;
-        UIManager.Instance.UpdateHP(_currentHP, _maxHP);
-        UIManager.Instance.ColorPanelEffect(Color.red);
-        if(_currentHP <= 0) {
-            _isAlive = false;
+      if(!_isAlive) {
+          return;
+      }
+      Debug.Log("hit");
+      _audioSource.volume = _hitSoundMaxVolume * GameManager.Instance.GetSFXVolume();
+      _audioSource.PlayOneShot(_hitSound);
+      _currentHP--;
+      UIManager.Instance.UpdateHP(_currentHP, _maxHP);
+      UIManager.Instance.ColorPanelEffect(Color.red);
+      if(_currentHP <= 0) {
+          _isAlive = false;
 			SceneManager.LoadScene("GameOverScene");
 		}
     }

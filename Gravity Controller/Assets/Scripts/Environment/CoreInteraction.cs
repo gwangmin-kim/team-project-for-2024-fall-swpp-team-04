@@ -35,6 +35,7 @@ public class CoreInteraction : MonoBehaviour, IInteractable
 	[Header("Audio")]
 	[SerializeField] private AudioSource _audioSource;
 	[SerializeField] private AudioClip _timeOutSound;
+	[SerializeField] private float _timeOutSoundMaxVolume = 1f;
 
 	void Start()
    {
@@ -98,7 +99,7 @@ public class CoreInteraction : MonoBehaviour, IInteractable
    private System.Collections.IEnumerator ClearEnemiesAndActivateEmission()
    {
       yield return new WaitForSeconds(_delay);
-
+		_audioSource.volume = _timeOutSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_timeOutSound);
 
 		SendOnDeathSignalToEnemies();	  
