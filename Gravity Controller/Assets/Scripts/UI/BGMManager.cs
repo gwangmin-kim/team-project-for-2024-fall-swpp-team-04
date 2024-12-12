@@ -22,6 +22,8 @@ public class BGMManager : MonoBehaviour
 
 	private Coroutine _currentFadeCoroutine;
 
+	public int CurrentStage { get; private set; } = -1;
+
 	private void Awake()
 	{
 		if (Instance == null)
@@ -34,10 +36,19 @@ public class BGMManager : MonoBehaviour
 			Destroy(gameObject);
 		}
 	}
+	private void Start()
+	{
+		PlayBGM(_stage1BGM);
+	}
 
 	/// stage 0 = lobby, 1~4 = stage1~4, 5 = boss
 	public void SetStageBGM(int stage)
 	{
+		if (CurrentStage == stage)
+			return;
+
+		CurrentStage = stage;
+
 		AudioClip clipToPlay = null;
 
 		switch (stage)

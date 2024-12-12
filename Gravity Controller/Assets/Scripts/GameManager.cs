@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
 	public float GetBGMVolume()
 	{
 		return 1f;
+	}
 
 	public bool IsClear()
 	{

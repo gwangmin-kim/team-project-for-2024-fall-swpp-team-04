@@ -21,6 +21,8 @@ public class Door_Stage4 : MonoBehaviour, IDoor
 				}
 			}
 		}
+
+		BGMManager.Instance.SetStageBGM(0);
 	}
 
 	public void Close()
