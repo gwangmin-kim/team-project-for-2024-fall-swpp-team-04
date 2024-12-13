@@ -296,7 +296,6 @@ public class PlayerController : MonoBehaviour
 		if (Physics.Raycast(_camera.position, _camera.transform.forward, out hit, _interactiveRange))
 		{
 			GameObject targetObject = hit.collider.gameObject;
-			Debug.Log(targetObject.tag);
 			if (targetObject.CompareTag("Lever"))
 			{
 				if (targetObject.TryGetComponent<DoorLever>(out DoorLever lever))
