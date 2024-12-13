@@ -37,6 +37,8 @@ public class CoreInteraction : MonoBehaviour, IInteractable
 	[SerializeField] private AudioClip _timeOutSound;
 	[SerializeField] private float _timeOutSoundMaxVolume = 1f;
 
+	[SerializeField] private AudioClip _coreSound;
+	[SerializeField] private float _coreSoundMaxVolume = 1f;
 	void Start()
    {
       _gameManager = FindObjectOfType<GameManager>();
@@ -68,6 +70,9 @@ public class CoreInteraction : MonoBehaviour, IInteractable
             _coreLight.enabled = true;
          }
 
+		 _audioSource.volume = _coreSoundMaxVolume * GameManager.Instance.GetSFXVolume();
+		 _audioSource.PlayOneShot(_coreSound);
+
 		 StartCoroutine(GlobalLightOff());
 
 		 _wall.SetActive(true);
@@ -86,6 +91,8 @@ public class CoreInteraction : MonoBehaviour, IInteractable
          }
 
 		 _isInteractable = false; 
+		 _audioSource.volume = _coreSoundMaxVolume * GameManager.Instance.GetSFXVolume();
+		 _audioSource.PlayOneShot(_coreSound);
 		 StartCoroutine(GlobalLightOn());
 
          if (_door.TryGetComponent<IDoor>(out IDoor door))
