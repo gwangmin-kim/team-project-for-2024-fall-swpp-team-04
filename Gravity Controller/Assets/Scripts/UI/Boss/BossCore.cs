@@ -1,15 +1,14 @@
 using System.Collections;
 using UnityEngine;
 
-public class BossCore : MonoBehaviour
+public class BossCore : MonoBehaviour, IInteractable
 {
 	[SerializeField] private Light _coreLight;
 	[SerializeField] private GameObject _textCanvas;
 	[SerializeField] private GameObject _videoCanvas;
-	[SerializeField] private float _interactionRadius = 5f;
 
 	private VideoManager _videoManager;
-	private bool _hasInteracted = false;
+	private bool _isInteractive= true;
 
 	void Start()
 	{
@@ -19,27 +18,18 @@ public class BossCore : MonoBehaviour
 		_videoManager = _videoCanvas.GetComponent<VideoManager>();
 	}
 
-	void Update()
+	public void Interactive()
 	{
-		if (!_hasInteracted && IsPlayerWithinRadius())
-		{
-			StartInteraction();
-		}
+		StartInteraction();
 	}
 
-	private bool IsPlayerWithinRadius()
+	public bool IsInteractable()
 	{
-		GameObject player = GameObject.FindWithTag("Player");
-		if (player == null) return false;
-
-		float distance = Vector3.Distance(transform.position, player.transform.position);
-		Debug.Log($"Distance to player: {distance}");
-		return distance <= _interactionRadius;
+		return _isInteractive;
 	}
-
 	private void StartInteraction()
 	{
-		_hasInteracted = true;
+		_isInteractive = false;
 		_coreLight.enabled = true;
 
 		// 영상이 아닌 텍스트 먼저 노출
