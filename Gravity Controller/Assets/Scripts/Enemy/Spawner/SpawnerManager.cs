@@ -6,14 +6,14 @@ public class SpawnerManager : MonoBehaviour
 {
 	[SerializeField] private List<GameObject> _spawnerObjects;
 	[SerializeField] private List<float> _spawnTimes;
-	[SerializeField] private List<int> _enemyCounts; 
-	[SerializeField] private List<float> _customDelays; 
+	[SerializeField] private List<int> _enemyCounts;
+	[SerializeField] private List<float> _customDelays;
 	private List<IEnemyFactory> _spawners = new List<IEnemyFactory>();
-	private int _currentSpawnerIndex = 0;
-	[SerializeField] private int _spawnCount = -1; // if set as default, do original logic(spawn infinite), set 0 if spawn only onetime in list
+	private int _spawnCount = 0;
 
 	void Start()
 	{
+		// 스포너 객체 초기화
 		foreach (var obj in _spawnerObjects)
 		{
 			var spawner = obj.GetComponent<IEnemyFactory>();
@@ -22,37 +22,27 @@ public class SpawnerManager : MonoBehaviour
 				_spawners.Add(spawner);
 			}
 		}
-
-		if (_spawners.Count > 0)
-		{
-			Invoke(nameof(SpawnEnemies), _spawnTimes[_currentSpawnerIndex]);
-		}
+		StartCoroutine(SpawnEnemiesCoroutine());
 	}
-
-	private void SpawnEnemies()
+	private IEnumerator SpawnEnemiesCoroutine()
 	{
-		int enemyCount = _enemyCounts[_currentSpawnerIndex];
-		float customDelay = _customDelays[_currentSpawnerIndex];
-
-		for (int i = 0; i < enemyCount; i++)
+		float previousTime = 0f;
+		for (int i = 0; i < _spawnTimes.Count; i++)
 		{
-			if (_spawners[_currentSpawnerIndex] is DelayedSpawner delayedSpawner)
+			float waitTime = _spawnTimes[i] - previousTime;
+			yield return new WaitForSeconds(waitTime);
+			previousTime = _spawnTimes[i];
+
+			int spawnerIndex = i % _spawners.Count;
+			int enemyCount = _enemyCounts[i % _enemyCounts.Count];
+			float delay = _customDelays[i % _customDelays.Count];
+
+			for (int c = 0; c < enemyCount; c++)
 			{
-				delayedSpawner.SetTimer(i * customDelay);
-			}
-			else
-			{
-				_spawners[_currentSpawnerIndex].SpawnEnemy();
+				_spawners[spawnerIndex].SpawnEnemy();
+				if (c < enemyCount - 1)
+					yield return new WaitForSeconds(delay);
 			}
 		}
-		_spawnCount++;
-		if (_spawnCount >=  0 &&_spawnCount >= _spawnTimes.Count)
-		{
-			return;
-		}
-
-		_currentSpawnerIndex = (_currentSpawnerIndex + 1) % _spawners.Count;
-
-		Invoke(nameof(SpawnEnemies), _spawnTimes[_currentSpawnerIndex]);
 	}
 }

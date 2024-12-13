@@ -44,7 +44,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.1
+  m_Radius: 0.7
   m_Center: {x: 0, y: 0, z: -0.4014706}
 --- !u!114 &5086187305391594203
 MonoBehaviour:
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: -7959344285058671148}
   m_Layer: 0
   m_Name: WalkingEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -115,7 +115,7 @@ MonoBehaviour:
   _changeDirectionIntervalMin: 2
   _changeDirectionIntervalMax: 3
   _chaseSpeed: 4
-  _chaseRange: 7
+  _chaseRange: 15
   _attackRange: 1.5
   _attackHitRange: 2
   _sightRange: 15
@@ -130,6 +130,9 @@ MonoBehaviour:
   _walkingSound: {fileID: 0}
   _followingSound: {fileID: 0}
   _attackingSound: {fileID: 8300000, guid: 17cb410ad5a9ecd409546e01df2898d2, type: 3}
+  _walkingSoundMaxVolume: 1
+  _followingSoundMaxVolume: 1
+  _attackingSoundMaxVolume: 1
 --- !u!54 &5086187305545989720
 Rigidbody:
   m_ObjectHideFlags: 0

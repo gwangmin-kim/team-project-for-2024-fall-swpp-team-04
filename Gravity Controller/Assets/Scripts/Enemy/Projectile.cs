@@ -19,7 +19,7 @@ public class Projectile : MonoBehaviour
 	// issue: instantiate 즉시 투사체를 소환한 드론과 충돌이 감지되는 듯함
 	// 우선 태그가 enemy이면 무시하도록 했는데, 만약 드론의 공격에 다른 적이 맞았을 때 공격받는 효과를 만들고 싶다면 수정이 필요
 	private void OnTriggerEnter(Collider other) {
-		if(other.CompareTag("Enemy")) {
+		if(other.CompareTag("Enemy")|| other.CompareTag("Turret")) {
 			return;
 		}
 		if(other.CompareTag("Player")) {

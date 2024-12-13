@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _interactiveRange;
     [SerializeField] private KeyCode _interactKey;
     private HashSet<GameObject> _interactedObjects = new HashSet<GameObject>();
-    private int _stage = 1;
+    public int _stage = 1;
 
 	[SerializeField] private AudioClip _fireSound; 
 	[SerializeField] private AudioClip _reloadSound;

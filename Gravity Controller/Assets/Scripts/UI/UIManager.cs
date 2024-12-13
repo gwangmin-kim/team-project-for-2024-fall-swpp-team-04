@@ -247,7 +247,7 @@ public class UIManager : MonoBehaviour
 		bool enterPressed = false;
 		while (!enterPressed)
 		{
-			if (Input.GetKeyDown(KeyCode.E))
+			if (Input.GetKeyDown(KeyCode.T))
 			{
 				enterPressed = true;
 			}
