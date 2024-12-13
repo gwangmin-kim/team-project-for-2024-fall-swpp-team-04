@@ -254,7 +254,8 @@ public class PlayerController : MonoBehaviour
 				//rigid.AddForce(Physics.gravity * rigid.mass * (_localGravityForce - 1f), ForceMode.Impulse);
 				// hit.collider.gameObject.GetComponent<EnemyController>().OnHit();
 				targetSkillReceiver.ReceiveSkill();
-            }
+				_gunGameObject.SendMessage("HideGunOnSkill", SendMessageOptions.DontRequireReceiver);
+			}
         }
     }
 

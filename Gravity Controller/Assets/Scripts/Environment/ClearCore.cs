@@ -92,7 +92,7 @@ public class ClearCore : MonoBehaviour, IInteractable
 
 			// Disable interaction
 			_isInteractable = false;
-
+			_coreLight.enabled = false;
 			// Hide interaction UI
 			UIManager.Instance.HideInteractionUi();
 		}
