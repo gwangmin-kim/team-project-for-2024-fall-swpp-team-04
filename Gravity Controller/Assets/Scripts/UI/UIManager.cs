@@ -171,10 +171,6 @@ public class UIManager : MonoBehaviour
 		SetCrosshairSize(_defaultSize);
 	}
 
-	public void CrossHairHit()
-	{
-		// 총에 적이 맞으면 붉은색으로 변한다든가 하는 효과를 주면 좋을 것 같음
-	}
 	public void TriggerCoreInteractionUi()
 	{
 		StartCoroutine(ShowCoreInteractionUi());
@@ -203,7 +199,7 @@ public class UIManager : MonoBehaviour
 	private IEnumerator ShowCoreInteractionUi()
 	{
 		_warningTriangle.SetActive(true);
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(2f);
 		_warningTriangle.SetActive(false);
 
 		_progressBar.value = 0;
@@ -251,7 +247,7 @@ public class UIManager : MonoBehaviour
 		bool enterPressed = false;
 		while (!enterPressed)
 		{
-			if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+			if (Input.GetKeyDown(KeyCode.E))
 			{
 				enterPressed = true;
 			}
