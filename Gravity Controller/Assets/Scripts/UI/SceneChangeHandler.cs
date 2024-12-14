@@ -60,9 +60,11 @@ public class SceneChangeHandler : MonoBehaviour
 		GameObject summonPoint = null;
 		if (_gameSave.atLobby) { 
 			summonPoint = GameObject.Find("Summon Point").transform.GetChild(0).gameObject;
+			BGMManager.Instance.SetStageBGM(0);
 		}
 		else {
 			summonPoint = GameObject.Find("Summon Point").transform.GetChild(1).GetChild(_gameSave.stage - 1).gameObject;
+			BGMManager.Instance.SetStageBGM(_gameSave.stage);
 		}
 		player.transform.position = summonPoint.transform.position;
 		player.transform.rotation = summonPoint.transform.rotation;
