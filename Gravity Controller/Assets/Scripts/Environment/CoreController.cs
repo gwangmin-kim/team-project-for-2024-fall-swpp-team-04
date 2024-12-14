@@ -154,6 +154,18 @@ public class CoreController : MonoBehaviour, IInteractable
 			RestoreCore(i);
 		}
 
+		for (int i = 0; i < _stageLights.Count; i++)
+		{
+			if (i == stage - 1)
+			{
+				_stageLights[i].intensity = 10f;
+			}
+			else
+			{
+				_stageLights[i].intensity = 0f;
+			}
+		}
+
 		_current_stage = stage + 1;
 	}
 }
