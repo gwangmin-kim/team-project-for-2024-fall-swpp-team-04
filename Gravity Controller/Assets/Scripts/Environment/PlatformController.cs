@@ -86,7 +86,10 @@ public class PlatformController : MonoBehaviour
 
 		foreach (ParticleSystem dustParticle in _dust)
 		{
-			var mult = dustParticle.main.startSpeedMultiplier;
+			var main = dustParticle.main;
+			main.startColor = IsEmergency() ? (Color) new Color32(0x60, 0x37, 0x3e, 0xff) : (Color) new Color32(0x67, 0x63, 0x5d, 0xff);
+
+			var mult = main.startSpeedMultiplier;
 			var em = dustParticle.emission;
 			mult = _unitSpeed * (7 + _targetY - transform.position.y);
 			em.rateOverTime = _unitParticleRate * Mathf.Pow((7 + _targetY - transform.position.y), _emissionPower);
@@ -99,9 +102,16 @@ public class PlatformController : MonoBehaviour
 			
 			var sparkle = transform.parent.Find("SparkleDust");
 			sparkle.position = newPosition;
+			var main = sparkle.GetComponent<ParticleSystem>().main;
+			main.startColor = IsEmergency() ? (Color)new Color32(0x60, 0x37, 0x3e, 0xff) : (Color)new Color32(0x67, 0x63, 0x5d, 0xff);
 			sparkle.gameObject.SetActive(true);
 
 			gameObject.SetActive(false);
 		}
+	}
+
+	private bool IsEmergency()
+	{
+		return GameObject.Find("Stage_third").transform.Find("FUSION_CORE").GetComponent<CoreInteraction>().IsEmergency;
 	}
 }
