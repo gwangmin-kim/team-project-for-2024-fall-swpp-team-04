@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance { get; private set; }
 	private List<GameObject> _activeEnemies = new List<GameObject>();
 	private int _enemyNumber = 0;
+	private float _sfxVolume = 1f;
+	private float _bgmVolume = 1f;
 
 	private void Awake()
 	{
@@ -19,6 +21,8 @@ public class GameManager : MonoBehaviour
 		{
 			Destroy(gameObject);
 		}
+
+		Cursor.visible = false;
 	}
 
 	public void RegisterEnemy(GameObject enemy)
@@ -48,12 +52,22 @@ public class GameManager : MonoBehaviour
 
 	public float GetSFXVolume()
 	{
-		return 1f;
+		return _sfxVolume;
+	}
+
+	public void SetSFXVolume(float vol)
+	{
+		_sfxVolume = vol;
 	}
 
 	public float GetBGMVolume()
 	{
-		return 1f;
+		return _bgmVolume;
+	}
+
+	public void SetBGMVolume(float vol)
+	{
+		_bgmVolume = vol;
 	}
 
 	public bool IsClear()

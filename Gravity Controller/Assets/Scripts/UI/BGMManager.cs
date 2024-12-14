@@ -18,7 +18,7 @@ public class BGMManager : MonoBehaviour
 	[SerializeField] private AudioClip _stage4BGM;
 	[SerializeField] private AudioClip _bossBGM;
 
-	[SerializeField] private float _BGMMaxVolume = 1f;
+	[SerializeField] private float _bgmMaxVolume = 1f;
 
 	private Coroutine _currentFadeCoroutine;
 
@@ -29,7 +29,6 @@ public class BGMManager : MonoBehaviour
 		if (Instance == null)
 		{
 			Instance = this;
-			DontDestroyOnLoad(gameObject);
 		}
 		else
 		{
@@ -125,11 +124,11 @@ public class BGMManager : MonoBehaviour
 		while (elapsed < _fadeDuration)
 		{
 			float t = elapsed / _fadeDuration;
-			_audioSource.volume = Mathf.Lerp(0f, _BGMMaxVolume * GameManager.Instance.GetBGMVolume(), t);
+			_audioSource.volume = Mathf.Lerp(0f, _bgmMaxVolume * GameManager.Instance.GetBGMVolume(), t);
 			elapsed += Time.deltaTime;
 			yield return null;
 		}
-		_audioSource.volume = _BGMMaxVolume * GameManager.Instance.GetBGMVolume();
+		_audioSource.volume = _bgmMaxVolume * GameManager.Instance.GetBGMVolume();
 
 		_currentFadeCoroutine = null;
 	}

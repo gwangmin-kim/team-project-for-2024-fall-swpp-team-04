@@ -367,5 +367,8 @@ public class PlayerController : MonoBehaviour
 	    _currentHP = _maxHP;
 	    _currentBullet = _maxBullet;
 	    _currentEnergy = _maxEnergy;
+
+		UIManager.Instance.UpdateHP(_maxHP, _maxHP);
+		UIManager.Instance.UpdateBullet(_maxBullet, _maxBullet);
 	}
 }

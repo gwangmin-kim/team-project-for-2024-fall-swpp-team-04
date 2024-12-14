@@ -33,6 +33,8 @@ public class CoreInteraction : MonoBehaviour, IInteractable
    private bool _isInteractable = true;
    private bool _hasEnemiesCleared = false; // 적 처치 완료 여부
 
+	public bool IsEmergency = false;
+
 	[Header("Audio")]
 	[SerializeField] private AudioSource _audioSource;
 	[SerializeField] private AudioClip _timeOutSound;
@@ -71,6 +73,8 @@ public class CoreInteraction : MonoBehaviour, IInteractable
             _coreLight.enabled = true;
          }
 
+		 IsEmergency = true;
+
 		 _audioSource.volume = _coreSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		 _audioSource.PlayOneShot(_coreSound);
 
@@ -90,6 +94,8 @@ public class CoreInteraction : MonoBehaviour, IInteractable
             forceFieldMaterial.EnableKeyword("_EMISSION");
             forceFieldMaterial.SetColor("_EmissionColor", Color.white); 
          }
+
+			IsEmergency = false;
 
 		 _isInteractable = false; 
 		 _audioSource.volume = _coreSoundMaxVolume * GameManager.Instance.GetSFXVolume();

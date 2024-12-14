@@ -16,41 +16,84 @@ public class SceneChangeHandler : MonoBehaviour
 	[SerializeField] private GameObject _textCanvas;
 	[SerializeField] private GameObject _loadingCanvas;
 
+	[SerializeField] private GameObject _alert;
+	private bool _hasResponded = false;
+	private bool _responce;
+
+	delegate void AfterAlert();
+	private AfterAlert _afterAlert;
+
+	readonly string _alertTextSaveExist = "save file detected.\r\nStarting a new game overwrites your existing save file. \r\nproceed?";
+	readonly string _alertTextSaveDoesntExist = "save file has no progress or does not exist.\r\nStart a new game instead?";
+
 	private void Awake()
 	{
 		Object.DontDestroyOnLoad(this.gameObject);
 	}
 
-	public void LoadGame(string scene)
+	public void LoadGame()
 	{
 		FetchSaves();
 		if (_gameSave.HasProgressed())
 		{
 			// savefile exists
-			// TODO alert
-			//return;
+			if (!_hasResponded)
+			{
+				_afterAlert = LoadGame;
+				Alert(_alertTextSaveExist);
+				return;
+			}
+			else
+			{
+				_hasResponded = false;
+				if (!_responce)
+				{
+					// No
+					return;
+				}
+				// Yes
+			}
 		}
 
 		_loadingCanvas.SetActive(true);
 		_textCanvas.SetActive(false);
 		_loadingCanvas.GetComponent<LoadingCanvas>().StartLoading();
-		StartCoroutine(LoadGameCoroutine(scene));
+		StartCoroutine(LoadGameCoroutine("UnitedScene"));
 	}
 
-	public void ContinueGame(string scene)
+	public void ContinueGame()
 	{
 		FetchSaves();
 		if (!_gameSave.HasProgressed())
 		{
 			// save is empty
-			// TODO alert
-			return;
+			if (!_hasResponded)
+			{
+				_afterAlert = ContinueGame;
+				Alert(_alertTextSaveDoesntExist);
+				return;
+			}
+			else
+			{
+				_hasResponded = false;
+				if (!_responce)
+				{
+					// No
+					return;
+				}
+				// Yes
+			}
 		}
 
+		ContinueGameWithoutAlert();
+	}
+
+	public void ContinueGameWithoutAlert()
+	{
 		_loadingCanvas.SetActive(true);
 		_textCanvas.SetActive(false);
 		_loadingCanvas.GetComponent<LoadingCanvas>().StartLoading();
-		StartCoroutine(ContinueGameCoroutine(scene));
+		StartCoroutine(ContinueGameCoroutine("UnitedScene"));
 	}
 
 	private void InitGameSave()
@@ -60,9 +103,11 @@ public class SceneChangeHandler : MonoBehaviour
 		GameObject summonPoint = null;
 		if (_gameSave.atLobby) { 
 			summonPoint = GameObject.Find("Summon Point").transform.GetChild(0).gameObject;
+			BGMManager.Instance.SetStageBGM(0);
 		}
 		else {
 			summonPoint = GameObject.Find("Summon Point").transform.GetChild(1).GetChild(_gameSave.stage - 1).gameObject;
+			BGMManager.Instance.SetStageBGM(_gameSave.stage);
 		}
 		player.transform.position = summonPoint.transform.position;
 		player.transform.rotation = summonPoint.transform.rotation;
@@ -80,9 +125,14 @@ public class SceneChangeHandler : MonoBehaviour
 
 	private void InitSettingsSave()
 	{
-		// TODO Initial settings
 		var player = GameObject.Find("Player");
 		player.GetComponent<PlayerMovement>().SetSensitivityMultiplier(_settingsSave.sensitivity);
+		GameManager.Instance.SetBGMVolume(_settingsSave.backGroundVolume/100f);
+		GameManager.Instance.SetSFXVolume(_settingsSave.effectVolume/100f);
+
+		// (Temporary) Set initial position
+		GameObject summonPoint = GameObject.Find("Summon Point").transform.GetChild(1).GetChild(0).gameObject;
+		player.transform.position = summonPoint.transform.position;
 	}
 
 	IEnumerator LoadGameCoroutine(string scene)
@@ -97,6 +147,8 @@ public class SceneChangeHandler : MonoBehaviour
 		InitSettingsSave();
 		//SceneManager.UnloadSceneAsync(mainMenu);
 
+		Autosave.SaveGameSave(false, 1);
+
 		Destroy(_loadingCanvas);
 		Destroy(gameObject);
 	}
@@ -110,17 +162,41 @@ public class SceneChangeHandler : MonoBehaviour
 		}
 		//var mainMenu = SceneManager.GetActiveScene();
 		//SceneManager.SetActiveScene(SceneManager.GetSceneByName(scene));
-		InitGameSave();
 		InitSettingsSave();
+		InitGameSave();
 		//SceneManager.UnloadSceneAsync(mainMenu);
 
 		Destroy(_loadingCanvas);
 		Destroy(gameObject);
 	}
 
-	private void FetchSaves()
+	public void FetchSaves()
 	{
 		_gameSave = CanvasSwitcher.Instance.gameSave;
 		_settingsSave = CanvasSwitcher.Instance.settingsSave;
+	}
+
+	private void Alert(string text)
+	{
+		_alert.transform.Find("TextPanel").transform.GetChild(0).GetComponent<Text>().text = text;
+		_alert.SetActive(true);
+	}
+
+	public void Yes()
+	{
+		//Debug.Log("Yes");
+		_hasResponded = true;
+		_responce = true;
+		_alert.SetActive(false);
+		_afterAlert();
+	}
+
+	public void No()
+	{
+		//Debug.Log("No");
+		_hasResponded = true;
+		_responce = false;
+		_alert.SetActive(false);
+		_afterAlert();
 	}
 }

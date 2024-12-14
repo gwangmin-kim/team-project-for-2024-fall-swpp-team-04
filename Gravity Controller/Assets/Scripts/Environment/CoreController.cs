@@ -58,7 +58,6 @@ public class CoreController : MonoBehaviour, IInteractable
 			StartCoroutine(GlobalLightOn());
         }
 
-        StageManager.Instance.LoadStage(_current_stage);
         RestoreCore(_current_stage - 1);
         StartCoroutine(UIManager.Instance.ShowStageIntro(_current_stage - 1));
         _player.UpdateStage(_current_stage + 1);
@@ -75,8 +74,15 @@ public class CoreController : MonoBehaviour, IInteractable
 		        _stageLights[i].intensity = 0f;
 	        }
         }
-		_current_stage++;
 
+		StartCoroutine(RemainingProcess());
+	}
+
+	private IEnumerator RemainingProcess()
+	{
+		yield return new WaitForSeconds(0f);
+		StageManager.Instance.LoadStage(_current_stage);
+		_current_stage++;
 		Autosave.SaveGameSave(true, _current_stage);
     }
     
@@ -146,6 +152,18 @@ public class CoreController : MonoBehaviour, IInteractable
 		for(int i=0;i < stage;i++)
 		{
 			RestoreCore(i);
+		}
+
+		for (int i = 0; i < _stageLights.Count; i++)
+		{
+			if (i == stage - 1)
+			{
+				_stageLights[i].intensity = 10f;
+			}
+			else
+			{
+				_stageLights[i].intensity = 0f;
+			}
 		}
 
 		_current_stage = stage + 1;

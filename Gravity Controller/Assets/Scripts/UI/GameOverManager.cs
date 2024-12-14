@@ -10,9 +10,13 @@ public class GameOverManager : MonoBehaviour
 
 	void Start()
 	{
+		DontDestroyOnLoad(gameObject);
+
 		_buttonsCanvasGroup.alpha = 0f;
 		_buttonsCanvasGroup.interactable = false;
 		_buttonsCanvasGroup.blocksRaycasts = false;
+
+		Cursor.visible = true;
 
 		StartCoroutine(FadeInButtons());
 	}
@@ -35,11 +39,43 @@ public class GameOverManager : MonoBehaviour
 
 	public void RestartGame()
 	{
-		SceneManager.LoadScene("FinalGameScene");
+		Destroy(GameManager.Instance.gameObject);
+		StartCoroutine(ContinueGame());
 	}
 
 	public void GoToMainMenu()
 	{
-		SceneManager.LoadScene("MainSettingUI");
+		Destroy(GameManager.Instance.gameObject);
+		StartCoroutine(LoadMainMenu());
+	}
+
+	IEnumerator ContinueGame()
+	{
+		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("MainSettingUI");
+		while (!asyncLoad.isDone)
+		{
+			yield return null;
+		}
+
+		GameObject.Find("Video Canvas").transform.GetChild(0).gameObject.GetComponent<VideoEndHandler>().EndVideo();
+		
+		var sceneChangeHandler = GameObject.Find("ButtonManager").GetComponent<SceneChangeHandler>();
+		sceneChangeHandler.FetchSaves();
+		sceneChangeHandler.ContinueGameWithoutAlert();
+
+		Destroy(gameObject);
+	}
+
+	IEnumerator LoadMainMenu()
+	{
+		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("MainSettingUI");
+		while (!asyncLoad.isDone)
+		{
+			yield return null;
+		}
+
+		GameObject.Find("Video Canvas").transform.GetChild(0).gameObject.GetComponent<VideoEndHandler>().EndVideo();
+
+		Destroy(gameObject);
 	}
 }
