@@ -7,17 +7,17 @@ public class VideoEndHandler : MonoBehaviour
 {
 	public VideoPlayer videoPlayer;
 	public GameObject uiGroup;
-	private CanvasGroup canvasGroup;
+	private CanvasGroup _canvasGroup;
 	public float fadeDuration = 1.0f;
 	void Start()
 	{
-		canvasGroup = uiGroup.GetComponent<CanvasGroup>();
-		if (canvasGroup == null)
+		_canvasGroup = uiGroup.GetComponent<CanvasGroup>();
+		if (_canvasGroup == null)
 		{
-			canvasGroup = uiGroup.AddComponent<CanvasGroup>();
+			_canvasGroup = uiGroup.AddComponent<CanvasGroup>();
 		}
 
-		canvasGroup.alpha = 0f;
+		_canvasGroup.alpha = 0f;
 		uiGroup.SetActive(false);
 
 		videoPlayer.loopPointReached += OnVideoEnd;
@@ -26,7 +26,7 @@ public class VideoEndHandler : MonoBehaviour
 	void OnVideoEnd(VideoPlayer vp)
 	{
 		uiGroup.SetActive(true);
-		StartCoroutine(FadeInCanvasGroup(canvasGroup, fadeDuration));
+		StartCoroutine(FadeInCanvasGroup(_canvasGroup, fadeDuration));
 	}
 
 	private IEnumerator FadeInCanvasGroup(CanvasGroup cg, float duration)
@@ -41,5 +41,11 @@ public class VideoEndHandler : MonoBehaviour
 		}
 
 		cg.alpha = 1f; 
+	}
+
+	public void EndVideo()
+	{
+		videoPlayer.Stop();
+		OnVideoEnd(videoPlayer);
 	}
 }

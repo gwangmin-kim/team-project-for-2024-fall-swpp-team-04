@@ -10,6 +10,8 @@ public class GameOverManager : MonoBehaviour
 
 	void Start()
 	{
+		DontDestroyOnLoad(gameObject);
+
 		_buttonsCanvasGroup.alpha = 0f;
 		_buttonsCanvasGroup.interactable = false;
 		_buttonsCanvasGroup.blocksRaycasts = false;
@@ -36,12 +38,39 @@ public class GameOverManager : MonoBehaviour
 	public void RestartGame()
 	{
 		Destroy(GameManager.Instance.gameObject);
-		SceneManager.LoadScene("UnitedScene");
+		StartCoroutine(ContinueGame());
 	}
 
 	public void GoToMainMenu()
 	{
 		Destroy(GameManager.Instance.gameObject);
-		SceneManager.LoadScene("MainSettingUI");
+		StartCoroutine(LoadMainMenu());
+	}
+
+	IEnumerator ContinueGame()
+	{
+		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("MainSettingUI");
+		while (!asyncLoad.isDone)
+		{
+			yield return null;
+		}
+
+		GameObject.Find("Video Canvas").transform.GetChild(0).gameObject.GetComponent<VideoEndHandler>().EndVideo();
+		GameObject.Find("ButtonManager").GetComponent<SceneChangeHandler>().ContinueGame("UnitedScene");
+
+		Destroy(gameObject);
+	}
+
+	IEnumerator LoadMainMenu()
+	{
+		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("MainSettingUI");
+		while (!asyncLoad.isDone)
+		{
+			yield return null;
+		}
+
+		GameObject.Find("Video Canvas").transform.GetChild(0).gameObject.GetComponent<VideoEndHandler>().EndVideo();
+
+		Destroy(gameObject);
 	}
 }
