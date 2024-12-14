@@ -80,9 +80,10 @@ public class SceneChangeHandler : MonoBehaviour
 
 	private void InitSettingsSave()
 	{
-		// TODO Initial settings
 		var player = GameObject.Find("Player");
 		player.GetComponent<PlayerMovement>().SetSensitivityMultiplier(_settingsSave.sensitivity);
+		GameManager.Instance.SetBGMVolume(_settingsSave.backGroundVolume/100f);
+		GameManager.Instance.SetSFXVolume(_settingsSave.effectVolume/100f);
 	}
 
 	IEnumerator LoadGameCoroutine(string scene)
