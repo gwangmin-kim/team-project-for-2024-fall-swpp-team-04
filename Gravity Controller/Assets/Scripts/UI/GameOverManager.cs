@@ -36,7 +36,7 @@ public class GameOverManager : MonoBehaviour
 	public void RestartGame()
 	{
 		Destroy(GameManager.Instance.gameObject);
-		SceneManager.LoadScene("FinalGameScene");
+		SceneManager.LoadScene("UnitedScene");
 	}
 
 	public void GoToMainMenu()
