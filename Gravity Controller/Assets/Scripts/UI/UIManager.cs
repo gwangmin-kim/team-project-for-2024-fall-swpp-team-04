@@ -243,15 +243,18 @@ public class UIManager : MonoBehaviour
 
 		_stageIntroBackground.SetActive(true);
 
+		Time.timeScale = 0f;
+
 		// Enter 키 입력 대기
 		bool enterPressed = false;
 		while (!enterPressed)
 		{
 			if (Input.GetKeyDown(KeyCode.T))
 			{
+				Time.timeScale = 1f;
 				enterPressed = true;
 			}
-			yield return null;
+			yield return new WaitForSeconds(0f);
 		}
 
 		_stageIntroBackground.SetActive(false);
