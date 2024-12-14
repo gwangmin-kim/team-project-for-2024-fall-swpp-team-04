@@ -84,6 +84,10 @@ public class SceneChangeHandler : MonoBehaviour
 		player.GetComponent<PlayerMovement>().SetSensitivityMultiplier(_settingsSave.sensitivity);
 		GameManager.Instance.SetBGMVolume(_settingsSave.backGroundVolume/100f);
 		GameManager.Instance.SetSFXVolume(_settingsSave.effectVolume/100f);
+
+		// (Temporary) Set initial position
+		GameObject summonPoint = GameObject.Find("Summon Point").transform.GetChild(1).GetChild(0).gameObject;
+		player.transform.position = summonPoint.transform.position;
 	}
 
 	IEnumerator LoadGameCoroutine(string scene)
