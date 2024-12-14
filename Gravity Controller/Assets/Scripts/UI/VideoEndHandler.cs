@@ -45,7 +45,9 @@ public class VideoEndHandler : MonoBehaviour
 
 	public void EndVideo()
 	{
-		videoPlayer.Stop();
+		//videoPlayer.Stop();
+		videoPlayer.time = 30f;
+		videoPlayer.Pause();
 		OnVideoEnd(videoPlayer);
 	}
 }
