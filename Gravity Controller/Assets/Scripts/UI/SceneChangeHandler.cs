@@ -115,8 +115,8 @@ public class SceneChangeHandler : MonoBehaviour
 		}
 		//var mainMenu = SceneManager.GetActiveScene();
 		//SceneManager.SetActiveScene(SceneManager.GetSceneByName(scene));
-		InitGameSave();
 		InitSettingsSave();
+		InitGameSave();
 		//SceneManager.UnloadSceneAsync(mainMenu);
 
 		Destroy(_loadingCanvas);
