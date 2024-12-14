@@ -35,11 +35,13 @@ public class GameOverManager : MonoBehaviour
 
 	public void RestartGame()
 	{
+		Destroy(GameManager.Instance.gameObject);
 		SceneManager.LoadScene("FinalGameScene");
 	}
 
 	public void GoToMainMenu()
 	{
+		Destroy(GameManager.Instance.gameObject);
 		SceneManager.LoadScene("MainSettingUI");
 	}
 }
