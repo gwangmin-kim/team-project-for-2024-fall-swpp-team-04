@@ -16,6 +16,8 @@ public class GameOverManager : MonoBehaviour
 		_buttonsCanvasGroup.interactable = false;
 		_buttonsCanvasGroup.blocksRaycasts = false;
 
+		Cursor.visible = true;
+
 		StartCoroutine(FadeInButtons());
 	}
 

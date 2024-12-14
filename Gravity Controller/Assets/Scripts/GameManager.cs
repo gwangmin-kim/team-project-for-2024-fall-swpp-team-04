@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
 		{
 			Destroy(gameObject);
 		}
+
+		Cursor.visible = false;
 	}
 
 	public void RegisterEnemy(GameObject enemy)
