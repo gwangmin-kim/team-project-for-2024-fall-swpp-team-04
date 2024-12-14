@@ -10,7 +10,8 @@ public class ClearCore : MonoBehaviour, IInteractable
 	[Header("Core Settings")]
 	[SerializeField] private Light _coreLight; // Core light
 	[SerializeField] private Renderer _forceFieldRenderer; // Renderer for emission effect
-	[SerializeField] private GameObject _door; // Door object (implements IDoor interface)
+	[SerializeField] private Door_2 _lobbyDoor; // Door object (implements IDoor interface)
+	[SerializeField] private GameObject _stageDoor;
 	private GameManager _gameManager; // Reference to GameManager
 	[SerializeField] private CoreController _coreController;
 	private bool _isInteractable = false; // Current interactable state
@@ -18,7 +19,6 @@ public class ClearCore : MonoBehaviour, IInteractable
 	[SerializeField] private AudioSource _audioSource;
 	[SerializeField] private AudioClip _coreSound;
 	[SerializeField] private float _coreSoundMaxVolume = 1f;
-
 	void Start()
 	{
 		_gameManager = FindObjectOfType<GameManager>();
@@ -56,12 +56,6 @@ public class ClearCore : MonoBehaviour, IInteractable
 		{
 			Debug.LogWarning("forceFieldRenderer is not assigned.");
 		}
-
-
-		if (_door == null)
-		{
-			Debug.LogError("door GameObject is not assigned.");
-		}
 	}
 	public bool IsInteractable()
 	{
@@ -92,7 +86,7 @@ public class ClearCore : MonoBehaviour, IInteractable
 
 			// Disable interaction
 			_isInteractable = false;
-
+			_coreLight.enabled = false;
 			// Hide interaction UI
 			UIManager.Instance.HideInteractionUi();
 		}
@@ -123,9 +117,14 @@ public class ClearCore : MonoBehaviour, IInteractable
 			}
 		}
 
-		if (_door != null && _door.TryGetComponent<IDoor>(out IDoor doorComponent))
+		if (_stageDoor != null && _stageDoor.TryGetComponent<IDoor>(out IDoor doorComponent))
 		{
 			doorComponent.Open();
+		}
+
+		if (_lobbyDoor != null)
+		{
+			_lobbyDoor.EnableOpenFromStage();
 		}
 
 		_coreController.ResetCoreController();

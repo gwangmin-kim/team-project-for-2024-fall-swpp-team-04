@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _interactiveRange;
     [SerializeField] private KeyCode _interactKey;
     private HashSet<GameObject> _interactedObjects = new HashSet<GameObject>();
-    private int _stage = 1;
+    public int _stage = 1;
 
 	[SerializeField] private AudioClip _fireSound; 
 	[SerializeField] private AudioClip _reloadSound;
@@ -254,7 +254,8 @@ public class PlayerController : MonoBehaviour
 				//rigid.AddForce(Physics.gravity * rigid.mass * (_localGravityForce - 1f), ForceMode.Impulse);
 				// hit.collider.gameObject.GetComponent<EnemyController>().OnHit();
 				targetSkillReceiver.ReceiveSkill();
-            }
+				_gunGameObject.SendMessage("HideGunOnSkill", SendMessageOptions.DontRequireReceiver);
+			}
         }
     }
 
@@ -295,7 +296,6 @@ public class PlayerController : MonoBehaviour
 		if (Physics.Raycast(_camera.position, _camera.transform.forward, out hit, _interactiveRange))
 		{
 			GameObject targetObject = hit.collider.gameObject;
-
 			if (targetObject.CompareTag("Lever"))
 			{
 				if (targetObject.TryGetComponent<DoorLever>(out DoorLever lever))

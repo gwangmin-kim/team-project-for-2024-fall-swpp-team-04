@@ -13,6 +13,7 @@ public class Door_2 : MonoBehaviour, IDoor
     public bool isOpenableFromLobby = false;
     public bool isOpenableFromStage = false;
     private bool _isOpened = false;
+    private bool _canOpenFromStage = false;
 
 	[SerializeField] private AudioSource _audioSource;
 	[SerializeField] private AudioClip _doorSound;
@@ -20,8 +21,9 @@ public class Door_2 : MonoBehaviour, IDoor
 
 	void Start()
     {
-        _animator = GetComponent<Animator>();    
-    }
+        _animator = GetComponent<Animator>();
+		_canOpenFromStage = false;
+	}
 
     // Update is called once per frame
     void Update()
@@ -45,8 +47,8 @@ public class Door_2 : MonoBehaviour, IDoor
                 _openTriggerFromStage.SetActive(true);
                 _openTriggerFromLobby.SetActive(true);
                 _closeTriggerFromLobby.SetActive(true);
-            } else if (!_isOpened && _openTriggerFromStage && !_openTriggerFromStage.activeSelf) {
-                Open();
+            } else if (!_isOpened && _canOpenFromStage && _openTriggerFromStage && !_openTriggerFromStage.activeSelf){
+				Open();
                 _closeTriggerFromStage.SetActive(true);
                 _openTriggerFromLobby.SetActive(true);
                 _closeTriggerFromLobby.SetActive(true);
@@ -73,5 +75,9 @@ public class Door_2 : MonoBehaviour, IDoor
 		_audioSource.PlayOneShot(_doorSound);
 		_isOpened = false;
         _animator.SetBool("Open", false);
+    }
+    public void EnableOpenFromStage()
+    {
+	    _canOpenFromStage = true;
     }
 }

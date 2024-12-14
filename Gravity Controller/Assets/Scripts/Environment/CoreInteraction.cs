@@ -21,8 +21,9 @@ public class CoreInteraction : MonoBehaviour, IInteractable
 	private float _epsilon = 1e-5f;
 
    [SerializeField] private Light _coreLight;
-   [SerializeField] private GameObject _door;
-   [SerializeField] private GameObject _wall;
+   [SerializeField] private GameObject _stageDoor;
+   [SerializeField] private Door_2 _lobbyDoor;
+	[SerializeField] private GameObject _wall;
    [SerializeField] private GameObject _spawner;
    [SerializeField] private Renderer _forceFieldRenderer;
    [SerializeField] private CoreController _coreController;
@@ -95,11 +96,15 @@ public class CoreInteraction : MonoBehaviour, IInteractable
 		 _audioSource.PlayOneShot(_coreSound);
 		 StartCoroutine(GlobalLightOn());
 
-         if (_door.TryGetComponent<IDoor>(out IDoor door))
+         if (_stageDoor.TryGetComponent<IDoor>(out IDoor door))
          {
             door.Open();
          }
-         _coreController.ResetCoreController();
+		 if (_lobbyDoor != null)
+		 {
+			_lobbyDoor.EnableOpenFromStage();
+		 }
+			_coreController.ResetCoreController();
       }
    }
 

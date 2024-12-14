@@ -102,17 +102,6 @@ public class GunMovement : MonoBehaviour
 				StartCoroutine(HideGun(true));
 			}
 		}
-
-		// Handle hiding gun on right mouse button or 'V' key press (skill usage)
-		if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.V))
-		{
-			if (!_isAnimating)
-			{
-				StartCoroutine(HideGun(false));
-			}
-		}
-
-		
 	}
 
 	/// <summary>

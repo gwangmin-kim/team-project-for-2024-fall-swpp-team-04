@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: -2161547770594787731}
   m_Layer: 0
   m_Name: FlyingEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -115,6 +115,9 @@ MonoBehaviour:
   _flyingSound: {fileID: 0}
   _followingSound: {fileID: 0}
   _attackingSound: {fileID: 8300000, guid: 56817f6549d1c0f4e96514d795c8ac3e, type: 3}
+  _flyingSoundMaxVolume: 1
+  _followingSoundMaxVolume: 1
+  _attackingSoundMaxVolume: 1
 --- !u!82 &-2161547770594787731
 AudioSource:
   m_ObjectHideFlags: 0

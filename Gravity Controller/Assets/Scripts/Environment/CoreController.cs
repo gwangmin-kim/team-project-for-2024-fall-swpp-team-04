@@ -17,7 +17,8 @@ public class CoreController : MonoBehaviour, IInteractable
     [SerializeField] private float _environmentLightIntensity;
     [SerializeField] private float _fogDensity;
     [SerializeField] private float _lightOnDamping;
-    public bool _isInteractable = true;
+    [SerializeField] private List<Light> _stageLights;
+	public bool _isInteractable = true;
     private float _epsilon = 1e-5f;
     private int _current_stage = 1;
 
@@ -63,6 +64,17 @@ public class CoreController : MonoBehaviour, IInteractable
         _player.UpdateStage(_current_stage + 1);
 		_player.InitState();
         UIManager.Instance.EnergyGaugeUi();
+        for (int i = 0; i < _stageLights.Count; i++)
+        {
+	        if (i == _current_stage-1)
+	        {
+		        _stageLights[i].intensity = 10;
+	        }
+	        else
+	        {
+		        _stageLights[i].intensity = 0f;
+	        }
+        }
 		_current_stage++;
 
 		Autosave.SaveGameSave(true, _current_stage);
@@ -77,7 +89,14 @@ public class CoreController : MonoBehaviour, IInteractable
         RenderSettings.ambientIntensity = _initialEnvironmentLightIntensity;
         RenderSettings.fogColor = _initialFogColor;
         RenderSettings.fogDensity = _initialFogDensity;
-    }
+        if (_stageLights != null)
+        {
+	        foreach (Light stageLight in _stageLights)
+	        {
+		        stageLight.intensity = 0f;
+	        }
+        }
+	}
 
     private IEnumerator GlobalLightOn() {
         while(_sunLight.intensity < _sunLightIntensity - _epsilon) {

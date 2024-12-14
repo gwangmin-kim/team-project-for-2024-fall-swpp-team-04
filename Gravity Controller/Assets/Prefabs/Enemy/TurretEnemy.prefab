@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1773671938268676780}
   m_Layer: 0
   m_Name: turret
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1106984572414675492}
   m_Layer: 0
   m_Name: Gunpoint
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _headVerticalLimitRate: 0.7
-  _projectile: {fileID: 122154, guid: 3517d6179b17d7d41b2ab3881cb2cd67, type: 3}
+  _projectile: {fileID: 5536272087070060538, guid: 7d909f38bd8d64843ae344f3417c7ad7, type: 3}
   _projectileSpeed: 20
   _rotationDirection: 1
   _rotationSpeedHorizontal: 5
@@ -179,13 +179,16 @@ MonoBehaviour:
   _awarenessCoolDown: 3
   _neutralizedHeadDegree: 75
   _neutralizeCoolDown: 7
-  _headDropSpeed: 20
+  _headDropSpeed: 15
   _headRestoreSpeed: 5
   _quaternionEqualityThreshold: 0.99999
   _audioSource: {fileID: 5072182162371140193}
   _workingSound: {fileID: 0}
   _chargingSound: {fileID: 0}
   _attackingSound: {fileID: 8300000, guid: 56817f6549d1c0f4e96514d795c8ac3e, type: 3}
+  _workingSoundMaxVolume: 1
+  _chargingSoundMaxVolume: 1
+  _attackingSoundMaxVolume: 1
   _maxHp: 5
 --- !u!54 &1106984573255462244
 Rigidbody:
@@ -312,7 +315,7 @@ GameObject:
   - component: {fileID: 5668179927302414975}
   m_Layer: 0
   m_Name: Column
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -480,7 +483,7 @@ GameObject:
   - component: {fileID: 1543362659565010873}
   m_Layer: 0
   m_Name: Joint2
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -564,7 +567,7 @@ GameObject:
   - component: {fileID: 5740183297413367439}
   m_Layer: 0
   m_Name: CameraLens
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -648,7 +651,7 @@ GameObject:
   - component: {fileID: 1776573031335730916}
   m_Layer: 0
   m_Name: Joint1
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -818,7 +821,7 @@ GameObject:
   - component: {fileID: 8083089836800453593}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

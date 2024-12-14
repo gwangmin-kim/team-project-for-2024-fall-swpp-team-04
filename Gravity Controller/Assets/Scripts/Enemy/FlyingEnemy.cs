@@ -544,6 +544,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 
 		_isFalling = true;
 		_isNeutralized = true;
+		GameManager.Instance.UnregisterEnemy(gameObject);
 		StartSmoke();
 	}
 
