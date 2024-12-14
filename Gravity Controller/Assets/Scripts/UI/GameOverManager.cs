@@ -58,7 +58,10 @@ public class GameOverManager : MonoBehaviour
 		}
 
 		GameObject.Find("Video Canvas").transform.GetChild(0).gameObject.GetComponent<VideoEndHandler>().EndVideo();
-		GameObject.Find("ButtonManager").GetComponent<SceneChangeHandler>().ContinueGame("UnitedScene");
+		
+		var sceneChangeHandler = GameObject.Find("ButtonManager").GetComponent<SceneChangeHandler>();
+		sceneChangeHandler.FetchSaves();
+		sceneChangeHandler.ContinueGameWithoutAlert();
 
 		Destroy(gameObject);
 	}
