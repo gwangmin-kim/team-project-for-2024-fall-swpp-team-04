@@ -236,6 +236,9 @@ public class UIManager : MonoBehaviour
 		{
 			_stageTexts[stageIndex].SetActive(true);
 			_stageIntroBackground.SetActive(true);
+
+			Time.timeScale = 0f;
+
 			bool enterPressed = false;
 			while (!enterPressed)
 			{
