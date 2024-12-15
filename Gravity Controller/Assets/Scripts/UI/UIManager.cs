@@ -235,31 +235,19 @@ public class UIManager : MonoBehaviour
 		if (stageIndex >= 0 && stageIndex < _stageTexts.Count)
 		{
 			_stageTexts[stageIndex].SetActive(true);
-		}
-		else
-		{
-			Debug.LogWarning($"ShowStageIntro: {stageIndex}");
-		}
-
-		_stageIntroBackground.SetActive(true);
-
-		Time.timeScale = 0f;
-
-		// Enter 키 입력 대기
-		bool enterPressed = false;
-		while (!enterPressed)
-		{
-			if (Input.GetKeyDown(KeyCode.T))
+			_stageIntroBackground.SetActive(true);
+			bool enterPressed = false;
+			while (!enterPressed)
 			{
-				Time.timeScale = 1f;
-				enterPressed = true;
+				if (Input.GetKeyDown(KeyCode.T))
+				{
+					Time.timeScale = 1f;
+					enterPressed = true;
+				}
+				yield return new WaitForSeconds(0f);
 			}
-			yield return new WaitForSeconds(0f);
-		}
 
-		_stageIntroBackground.SetActive(false);
-		if (stageIndex >= 0 && stageIndex < _stageTexts.Count)
-		{
+			_stageIntroBackground.SetActive(false);
 			_stageTexts[stageIndex].SetActive(false);
 		}
 	}
