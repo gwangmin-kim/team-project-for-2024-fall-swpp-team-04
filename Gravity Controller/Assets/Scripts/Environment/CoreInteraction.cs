@@ -40,8 +40,10 @@ public class CoreInteraction : MonoBehaviour, IInteractable
 	[SerializeField] private AudioClip _timeOutSound;
 	[SerializeField] private float _timeOutSoundMaxVolume = 1f;
 
-	[SerializeField] private AudioClip _coreSound;
-	[SerializeField] private float _coreSoundMaxVolume = 1f;
+	[SerializeField] private AudioClip _coreSoundFirst;
+	[SerializeField] private float _coreSoundFisrtMaxVolume = 1f;
+	[SerializeField] private AudioClip _coreSoundCleared;
+	[SerializeField] private float _coreSoundClearMaxVolume = 1f;
 	void Start()
    {
       _gameManager = FindObjectOfType<GameManager>();
@@ -75,9 +77,9 @@ public class CoreInteraction : MonoBehaviour, IInteractable
 
 		 IsEmergency = true;
 
-		 _audioSource.volume = _coreSoundMaxVolume * GameManager.Instance.GetSFXVolume();
-		 _audioSource.PlayOneShot(_coreSound);
-
+		 _audioSource.volume = _coreSoundFisrtMaxVolume * GameManager.Instance.GetSFXVolume();
+		 _audioSource.PlayOneShot(_coreSoundFirst);
+		 BGMManager.Instance.SetStageBGM(6);
 		 StartCoroutine(GlobalLightOff());
 
 		 _wall.SetActive(true);
@@ -98,8 +100,9 @@ public class CoreInteraction : MonoBehaviour, IInteractable
 			IsEmergency = false;
 
 		 _isInteractable = false; 
-		 _audioSource.volume = _coreSoundMaxVolume * GameManager.Instance.GetSFXVolume();
-		 _audioSource.PlayOneShot(_coreSound);
+		 _audioSource.volume = _coreSoundClearMaxVolume * GameManager.Instance.GetSFXVolume();
+		 _audioSource.PlayOneShot(_coreSoundCleared);
+		 BGMManager.Instance.SetStageBGM(3);
 		 StartCoroutine(GlobalLightOn());
 
          if (_stageDoor.TryGetComponent<IDoor>(out IDoor door))

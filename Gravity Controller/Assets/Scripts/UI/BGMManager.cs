@@ -15,6 +15,7 @@ public class BGMManager : MonoBehaviour
 	[SerializeField] private AudioClip _stage1BGM;
 	[SerializeField] private AudioClip _stage2BGM;
 	[SerializeField] private AudioClip _stage3BGM;
+	[SerializeField] private AudioClip _stage3ActivatedBGM;
 	[SerializeField] private AudioClip _stage4BGM;
 	[SerializeField] private AudioClip _bossBGM;
 
@@ -69,6 +70,9 @@ public class BGMManager : MonoBehaviour
 				break;
 			case 5:
 				clipToPlay = _bossBGM;
+				break;
+			case 6: // stage3 activated
+				clipToPlay = _stage3ActivatedBGM;
 				break;
 			default:
 				clipToPlay = _lobbyBGM;
