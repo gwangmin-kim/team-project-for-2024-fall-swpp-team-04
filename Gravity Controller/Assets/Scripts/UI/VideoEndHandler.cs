@@ -23,6 +23,13 @@ public class VideoEndHandler : MonoBehaviour
 		videoPlayer.loopPointReached += OnVideoEnd;
 	}
 
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			EndVideo();
+		}
+	}
 	void OnVideoEnd(VideoPlayer vp)
 	{
 		uiGroup.SetActive(true);
