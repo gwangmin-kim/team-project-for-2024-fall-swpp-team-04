@@ -79,15 +79,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _recoilOffset: {x: 0.2, y: -0.2, z: -0.03}
   _recoilDuration: 0.12
+  _gunCoolDown: 0.5
   _hiddenOffset: {x: 0, y: -4.5, z: -0.5}
   _hiddenDurationSkill: 0.5
-  _hiddenDurationReload: 2
   _movementSwayAmountX: 1
   _movementSwayAmountZ: 0.5
   _movementSwaySpeed: 30
   _movementAngleLimit: 60
   _maxMoveSpeed: 10
   _playerMovement: {fileID: 0}
+  _gunMaterial: {fileID: 0}
+  _emissionColor: {r: 1, g: 1, b: 1, a: 1}
+  _emissionFadeDuration: 1
+  _reloadRotationOffset: {x: 15, y: 15, z: -10}
+  _reloadRotationDuration: 0.5
+  _recoilRotationOffset: {x: 3, y: 5, z: -3}
+  _recoilRotationDuration: 0.3
 --- !u!1 &7427491749010526446
 GameObject:
   m_ObjectHideFlags: 0
