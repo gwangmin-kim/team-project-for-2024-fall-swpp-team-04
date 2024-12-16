@@ -23,12 +23,14 @@ public class Door_Boss_Inner : MonoBehaviour, IDoor
         _originalPosDown = _doorDown.position;
     }
 
-    private void OnTriggerEnter() {
+    private void OnTriggerEnter(Collider other) {
         if(!_isLocked) {
             if(!_isOpened) {
                 Open();
             } else {
-                _isLocked = true;
+                if(other.transform.position.z > transform.position.z) {
+                    _isLocked = true;
+                }
                 Close();
             }
         }
