@@ -58,6 +58,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 	private float _chargeCooldownTimer; // Timer for charge cooldown
 	[SerializeField] private float _minHorizontalDistance;
 	[SerializeField] private float _minVerticalDistance;
+	[SerializeField] private float _playerHeightOffset;
 
 	[Header("Aim")]
 	// one must have  _minGunAngleDegree <= 90 <= _maxGunAngleDegree
@@ -337,8 +338,8 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 
 	private void DetectPlayer() {
 		// rotate
-		Vector3 directionToPlayer = (_player.transform.position - transform.position).normalized;
-		Vector3 gunDirection = (_player.transform.position - _gun.position).normalized;
+		Vector3 directionToPlayer = (_player.transform.position + new Vector3(0, _playerHeightOffset, 0) - transform.position).normalized;
+		Vector3 gunDirection = (_player.transform.position + new Vector3(0,_playerHeightOffset,0) - _gun.position).normalized;
 
 		// calculate aim angle
 		float theta = 0;
@@ -380,12 +381,12 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 		_gun.rotation = tempGunRotation;
 
 		Vector3 target = Vector3.zero;
-		if (Vector3.Scale(_player.transform.position-transform.position, new Vector3(1, 0, 1)).magnitude < _minHorizontalDistance)
+		if (Vector3.Scale(_player.transform.position + new Vector3(0, _playerHeightOffset, 0) - transform.position, new Vector3(1, 0, 1)).magnitude < _minHorizontalDistance)
 		{
 			// too close
 			target += tempBodyRotation * Vector3.back;
 		}
-		if (Mathf.Abs((_player.transform.position - transform.position).y) > _minVerticalDistance && _adjustingAimAngle)
+		if (Mathf.Abs((_player.transform.position + new Vector3(0, _playerHeightOffset, 0) - transform.position).y) > _minVerticalDistance && _adjustingAimAngle)
 		{
 			target += tempBodyRotation * ((theta > 90 ? 1 : -1) * Vector3.down);
 		}
@@ -415,7 +416,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 	private void FireProjectile() {
 		GameObject proj = Instantiate(_projectile, _gun.GetChild(0).position, Quaternion.identity);
 
-		Vector3 directionToPlayer = (_player.transform.position - _gun.GetChild(0).position).normalized;
+		Vector3 directionToPlayer = (_player.transform.position + new Vector3(0, _playerHeightOffset, 0) - _gun.GetChild(0).position).normalized;
 
 		_audioSource.volume = _attackingSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_attackingSound);
