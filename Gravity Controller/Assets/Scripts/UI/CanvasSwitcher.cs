@@ -164,7 +164,7 @@ public class CanvasSwitcher : MonoBehaviour
 		}
 
 		gameSave.atLobby = save.atLobby;
-		gameSave.stage = (save.stage < 1) ? 1 : (save.stage > 4) ? 4 : save.stage;
+		gameSave.stage = (save.stage < 1) ? 1 : (save.stage > 5) ? 5 : save.stage;
 	}
 
 	private void SaveSettingsSave()

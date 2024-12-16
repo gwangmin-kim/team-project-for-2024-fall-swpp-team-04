@@ -58,6 +58,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 	private float _chargeCooldownTimer; // Timer for charge cooldown
 	[SerializeField] private float _minHorizontalDistance;
 	[SerializeField] private float _minVerticalDistance;
+	[SerializeField] private float _playerHeightOffset;
 
 	[Header("Aim")]
 	// one must have  _minGunAngleDegree <= 90 <= _maxGunAngleDegree
@@ -134,7 +135,8 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 			// fall
 			if (_isNeutralized) {
 				RaycastHit hitBelow;
-				if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hitBelow, _fallingSpeed * Time.fixedDeltaTime + _minHeight))
+				bool hasHit = Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hitBelow, _fallingSpeed * Time.fixedDeltaTime + _minHeight);
+				if (hasHit && !EnemyCheck(hitBelow.collider.transform))
 				{
 					Debug.Log("Hit below: " + hitBelow.collider.name + "| point: " + hitBelow.point);
 					transform.Translate(hitBelow.point - transform.position + new Vector3(0, _minHeight, 0), Space.World);
@@ -147,10 +149,11 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 			else if (_isDead)
 			{
 				RaycastHit hitBelow;
-				if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hitBelow, _deathFallSpeed * Time.fixedDeltaTime + _minHeight))
+				bool hasHit = Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hitBelow, _deathFallSpeed * Time.fixedDeltaTime + _minHeight);
+				if (hasHit && !EnemyCheck(hitBelow.collider.transform))
 				{
 					Debug.Log("Hit below: " + hitBelow.collider.name + "| point: " + hitBelow.point);
-					transform.Translate(hitBelow.point - transform.position + new Vector3(0, _minHeight, 0)); 
+					transform.Translate(hitBelow.point - transform.position + new Vector3(0, _minHeight, 0));
 					//transform.position = hitBelow.point;
 					_isFalling = false;
 					StartCoroutine("Die");
@@ -253,6 +256,26 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 		_body.localPosition = Mathf.Sin(2 * Mathf.PI * _phase) * _amplitude*(Quaternion.Inverse(transform.rotation)*Vector3.up);
 	}
 
+	private bool EnemyCheck(Transform tr)
+	{
+		// check if the collider is a part of an enemy
+		var obj = tr;
+		if (obj.gameObject.CompareTag("Enemy"))
+		{
+			return true;
+		}
+		else
+			while (obj.parent != null)
+			{
+				obj = obj.parent;
+				if (obj.gameObject.CompareTag("Enemy"))
+				{
+					return true;
+				}
+				break;
+			}
+		return false;
+	}
 	private void BeforeWander()
 	{
 		SetRandomInterval();
@@ -337,8 +360,8 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 
 	private void DetectPlayer() {
 		// rotate
-		Vector3 directionToPlayer = (_player.transform.position - transform.position).normalized;
-		Vector3 gunDirection = (_player.transform.position - _gun.position).normalized;
+		Vector3 directionToPlayer = (_player.transform.position + new Vector3(0, _playerHeightOffset, 0) - transform.position).normalized;
+		Vector3 gunDirection = (_player.transform.position + new Vector3(0,_playerHeightOffset,0) - _gun.position).normalized;
 
 		// calculate aim angle
 		float theta = 0;
@@ -380,12 +403,12 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 		_gun.rotation = tempGunRotation;
 
 		Vector3 target = Vector3.zero;
-		if (Vector3.Scale(_player.transform.position-transform.position, new Vector3(1, 0, 1)).magnitude < _minHorizontalDistance)
+		if (Vector3.Scale(_player.transform.position + new Vector3(0, _playerHeightOffset, 0) - transform.position, new Vector3(1, 0, 1)).magnitude < _minHorizontalDistance)
 		{
 			// too close
 			target += tempBodyRotation * Vector3.back;
 		}
-		if (Mathf.Abs((_player.transform.position - transform.position).y) > _minVerticalDistance && _adjustingAimAngle)
+		if (Mathf.Abs((_player.transform.position + new Vector3(0, _playerHeightOffset, 0) - transform.position).y) > _minVerticalDistance && _adjustingAimAngle)
 		{
 			target += tempBodyRotation * ((theta > 90 ? 1 : -1) * Vector3.down);
 		}
@@ -415,7 +438,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 	private void FireProjectile() {
 		GameObject proj = Instantiate(_projectile, _gun.GetChild(0).position, Quaternion.identity);
 
-		Vector3 directionToPlayer = (_player.transform.position - _gun.GetChild(0).position).normalized;
+		Vector3 directionToPlayer = (_player.transform.position + new Vector3(0, _playerHeightOffset, 0) - _gun.GetChild(0).position).normalized;
 
 		_audioSource.volume = _attackingSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_attackingSound);

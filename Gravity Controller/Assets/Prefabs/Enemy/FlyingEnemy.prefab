@@ -100,6 +100,7 @@ MonoBehaviour:
   _chargeCooldown: 1
   _minHorizontalDistance: 7
   _minVerticalDistance: 5
+  _playerHeightOffset: 1.6
   _minGunAngleDegree: 70
   _maxGunAngleDegree: 120
   _adjustingAimAngleRatio: 0.7

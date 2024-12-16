@@ -98,7 +98,6 @@ public class SceneChangeHandler : MonoBehaviour
 
 	private void InitGameSave()
 	{
-		// TODO Initial settings
 		var player = GameObject.Find("Player");
 		GameObject summonPoint = null;
 		if (_gameSave.atLobby) { 
