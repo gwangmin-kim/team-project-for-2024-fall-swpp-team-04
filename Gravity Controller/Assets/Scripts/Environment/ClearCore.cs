@@ -15,6 +15,7 @@ public class ClearCore : MonoBehaviour, IInteractable
 	private GameManager _gameManager; // Reference to GameManager
 	[SerializeField] private CoreController _coreController;
 	private bool _isInteractable = false; // Current interactable state
+	private bool _hasInteracted = false;
 
 	[SerializeField] private AudioSource _audioSource;
 	[SerializeField] private AudioClip _coreSound;
@@ -74,12 +75,18 @@ public class ClearCore : MonoBehaviour, IInteractable
 	{
 		if (_gameManager.IsClear())
 		{
-
+			if (!_hasInteracted)
+			{
+				_isInteractable = true;
+			}
+			else
+			{
+				_isInteractable = false;
+			}
 			if (_coreLight != null)
 			{
 				_coreLight.enabled = true;
 			}
-			_isInteractable = true;
 		}
 		else
 		{
@@ -130,6 +137,7 @@ public class ClearCore : MonoBehaviour, IInteractable
 		_coreController.ResetCoreController();
 
 		// Disable interaction and hide UI
+		_hasInteracted = true;
 		_isInteractable = false;
 		UIManager.Instance.HideInteractionUi();
 	}
