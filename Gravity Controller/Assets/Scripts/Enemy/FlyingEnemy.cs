@@ -135,7 +135,8 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 			// fall
 			if (_isNeutralized) {
 				RaycastHit hitBelow;
-				if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hitBelow, _fallingSpeed * Time.fixedDeltaTime + _minHeight))
+				bool hasHit = Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hitBelow, _fallingSpeed * Time.fixedDeltaTime + _minHeight);
+				if (hasHit && !EnemyCheck(hitBelow.collider.transform))
 				{
 					Debug.Log("Hit below: " + hitBelow.collider.name + "| point: " + hitBelow.point);
 					transform.Translate(hitBelow.point - transform.position + new Vector3(0, _minHeight, 0), Space.World);
@@ -148,10 +149,11 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 			else if (_isDead)
 			{
 				RaycastHit hitBelow;
-				if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hitBelow, _deathFallSpeed * Time.fixedDeltaTime + _minHeight))
+				bool hasHit = Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hitBelow, _deathFallSpeed * Time.fixedDeltaTime + _minHeight);
+				if (hasHit && !EnemyCheck(hitBelow.collider.transform))
 				{
 					Debug.Log("Hit below: " + hitBelow.collider.name + "| point: " + hitBelow.point);
-					transform.Translate(hitBelow.point - transform.position + new Vector3(0, _minHeight, 0)); 
+					transform.Translate(hitBelow.point - transform.position + new Vector3(0, _minHeight, 0));
 					//transform.position = hitBelow.point;
 					_isFalling = false;
 					StartCoroutine("Die");
@@ -254,6 +256,26 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 		_body.localPosition = Mathf.Sin(2 * Mathf.PI * _phase) * _amplitude*(Quaternion.Inverse(transform.rotation)*Vector3.up);
 	}
 
+	private bool EnemyCheck(Transform tr)
+	{
+		// check if the collider is a part of an enemy
+		var obj = tr;
+		if (obj.gameObject.CompareTag("Enemy"))
+		{
+			return true;
+		}
+		else
+			while (obj.parent != null)
+			{
+				obj = obj.parent;
+				if (obj.gameObject.CompareTag("Enemy"))
+				{
+					return true;
+				}
+				break;
+			}
+		return false;
+	}
 	private void BeforeWander()
 	{
 		SetRandomInterval();
