@@ -25,6 +25,8 @@ public class BossStageController : MonoBehaviour
 
 	public void StartMoving()
 	{
+		Destroy(GameObject.Find("Player").GetComponent<PlayerController>());
+
 		if (!_isMoving)
 			StartCoroutine(MoveStage());
 	}
@@ -45,6 +47,8 @@ public class BossStageController : MonoBehaviour
 		_isMoving = false;
 
 		_videoCanvas.SetActive(true); _videoCanvas.SetActive(true);
+
+		Destroy(GameObject.Find("Player").GetComponent<PlayerMovement>());
 
 		// 스테이지 이동 완료 후 영상 재생
 		VideoManager vm = FindObjectOfType<VideoManager>();
