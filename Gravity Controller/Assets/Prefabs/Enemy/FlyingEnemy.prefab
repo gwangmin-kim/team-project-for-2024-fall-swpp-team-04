@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33925860b059ecd48ad93788a99f0fde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _projectile: {fileID: 122154, guid: 3517d6179b17d7d41b2ab3881cb2cd67, type: 3}
+  _projectile: {fileID: 122154, guid: b083cedd8a36a473da0bf81e5b281753, type: 3}
   _projectileSpeed: 10
   _wanderSpeed: 3
   _wanderRange: 7

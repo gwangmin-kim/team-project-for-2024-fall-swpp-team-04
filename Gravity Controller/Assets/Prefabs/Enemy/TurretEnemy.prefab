@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _headVerticalLimitRate: 0.7
-  _projectile: {fileID: 5536272087070060538, guid: 7d909f38bd8d64843ae344f3417c7ad7, type: 3}
+  _projectile: {fileID: 122154, guid: b3993b2e08eff4b51bcfba3aac1d9149, type: 3}
   _projectileSpeed: 20
   _rotationDirection: 1
   _rotationSpeedHorizontal: 5
