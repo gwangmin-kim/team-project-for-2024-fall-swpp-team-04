@@ -2984,6 +2984,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1159181880368780895}
   - component: {fileID: 873888632}
+  - component: {fileID: 9102534651866725830}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Core
@@ -3024,7 +3025,19 @@ MonoBehaviour:
   _coreLight: {fileID: 1737260669}
   _textCanvas: {fileID: 850045115}
   _videoCanvas: {fileID: 1614783741}
-  _interactionRadius: 10
+--- !u!135 &9102534651866725830
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5991389403561857399}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 15
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6200803413364794165
 GameObject:
   m_ObjectHideFlags: 0
