@@ -7,7 +7,7 @@ public class Door_Vert : MonoBehaviour, IDoor
     [SerializeField] private float _moveDistance;
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _openTime;
-    [SerializeField] DoorLever _doorLever;
+    //[SerializeField] DoorLever _doorLever;
     private Vector3 _originalPos;
     private Vector3 _targetPos;
     private AudioSource _audioSource;
@@ -30,8 +30,8 @@ public class Door_Vert : MonoBehaviour, IDoor
 		_audioSource.volume = _doorSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.Play();
         StopCoroutine(OpenDoor());
-        _doorLever.ResetLever();
-        StartCoroutine(CloseDoor());
+        //_doorLever.ResetLever();
+        //StartCoroutine(CloseDoor());
     }
 
     private IEnumerator CloseTimer() {
