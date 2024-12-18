@@ -47,7 +47,13 @@ public class GameManager : MonoBehaviour
 
 	public List<GameObject> GetActiveEnemies()
 	{
-		return _activeEnemies;
+		// 코루틴에서 리스트 처리 중 리스트에 변경이 가해질 수 있음
+		// 이로 인한 문제를 막기 위해 리스트의 요소를 모두 옮겨담아 새로운 리스트를 만들어 전달한다.
+		List<GameObject> copiedList = new List<GameObject>();
+		foreach (GameObject obj in _activeEnemies) {
+			copiedList.Add(obj);
+		}
+		return copiedList;
 	}
 
 	public float GetSFXVolume()

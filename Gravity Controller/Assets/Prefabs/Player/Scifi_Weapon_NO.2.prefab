@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1458096615058747945}
-  - component: {fileID: 4832536234471853415}
+  - component: {fileID: 3096112614437992645}
   m_Layer: 0
   m_Name: Scifi_Weapon_NO.2
   m_TagString: Untagged
@@ -56,16 +56,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4832536234471853414}
-  m_LocalRotation: {x: 0.093843676, y: 0.8506352, z: -0.16254203, w: 0.49111438}
+  m_LocalRotation: {x: 0.0938449, y: 0.8506347, z: -0.16254418, w: 0.4911141}
   m_LocalPosition: {x: 0.344, y: -3.8599992, z: 1.251}
-  m_LocalScale: {x: 0.019999996, y: 0.02, z: 0.020000003}
+  m_LocalScale: {x: 0.019999988, y: 0.02, z: 0.019999998}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3050338297923088782}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 21.636, y: 120, z: 0}
---- !u!114 &4832536234471853415
+--- !u!114 &3096112614437992645
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77,21 +77,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85606069366875e468c999e0a266c636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _recoilOffset: {x: 0.2, y: -0.2, z: -0.03}
-  _recoilDuration: 0.12
+  _recoilOffset: {x: 0.03, y: -0.03, z: -0.01}
+  _recoilDuration: 0.3
   _gunCoolDown: 0.5
   _hiddenOffset: {x: 0, y: -4.5, z: -0.5}
-  _hiddenDurationSkill: 0.5
+  _hiddenDurationSkill: 0.25
   _movementSwayAmountX: 1
-  _movementSwayAmountZ: 0.5
-  _movementSwaySpeed: 30
-  _movementAngleLimit: 60
-  _maxMoveSpeed: 10
+  _movementSwayAmountZ: 0.2
+  _movementSwaySpeed: 3
+  _movementAngleLimit: 30
+  _maxMoveSpeed: 20
   _playerMovement: {fileID: 0}
   _gunMaterial: {fileID: 0}
   _emissionColor: {r: 1, g: 1, b: 1, a: 1}
   _emissionFadeDuration: 1
-  _reloadRotationOffset: {x: 15, y: 15, z: -10}
+  _reloadRotationOffset: {x: 5, y: 5, z: -3}
   _reloadRotationDuration: 0.5
   _recoilRotationOffset: {x: 3, y: 5, z: -3}
   _recoilRotationDuration: 0.3
