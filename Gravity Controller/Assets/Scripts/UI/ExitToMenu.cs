@@ -32,6 +32,7 @@ public class ExitToMenu : MonoBehaviour
 		}
 
 		GameObject.Find("Video Canvas").transform.GetChild(0).gameObject.GetComponent<VideoEndHandler>().EndVideo();
+		Cursor.visible = true;
 
 		Destroy(gameObject);
 	}
