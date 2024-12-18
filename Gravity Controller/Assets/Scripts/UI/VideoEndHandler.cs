@@ -9,6 +9,13 @@ public class VideoEndHandler : MonoBehaviour
 	public GameObject uiGroup;
 	private CanvasGroup _canvasGroup;
 	public float fadeDuration = 1.0f;
+	private bool _videoEnded = false;
+
+	private void Awake()
+	{
+		_videoEnded = false;
+	}
+
 	void Start()
 	{
 		_canvasGroup = uiGroup.GetComponent<CanvasGroup>();
@@ -25,13 +32,14 @@ public class VideoEndHandler : MonoBehaviour
 
 	private void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.Escape))
+		if (Input.GetKeyDown(KeyCode.Escape) && !_videoEnded)
 		{
 			EndVideo();
 		}
 	}
 	void OnVideoEnd(VideoPlayer vp)
 	{
+		_videoEnded = true;
 		uiGroup.SetActive(true);
 		StartCoroutine(FadeInCanvasGroup(_canvasGroup, fadeDuration));
 	}
@@ -52,6 +60,8 @@ public class VideoEndHandler : MonoBehaviour
 
 	public void EndVideo()
 	{
+		_videoEnded = true;
+
 		//videoPlayer.Stop();
 		videoPlayer.time = 30f;
 		videoPlayer.Pause();
