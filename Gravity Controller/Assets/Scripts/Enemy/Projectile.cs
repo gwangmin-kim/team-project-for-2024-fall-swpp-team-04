@@ -23,9 +23,7 @@ public class Projectile : MonoBehaviour
 			return;
 		}
 		if(other.CompareTag("Player")) {
-			PlayerController playerController = other.GetComponent<PlayerController>();
-			playerController.OnHit();
-			Debug.Log("Hit Player");
+			other.GetComponent<PlayerHp>().OnHit();
 		}
 		Destroy(gameObject);
 	}

@@ -27,7 +27,6 @@ public class UIManager : MonoBehaviour
 	[Header("Color Panel")]
 	[SerializeField] private Image _colorPanel;
 	[SerializeField] private float _colorPanelEffectDuration;
-	[SerializeField] private float _colorPanelEffectAlpha;
 	private float _colorPanelEffectTimer = 0f;
 
 	[Header("Core Interaction")]
@@ -75,12 +74,7 @@ public class UIManager : MonoBehaviour
 		_energyGauge.gameObject.SetActive(false);
 	}
 
-	private void Update()
-	{
-		UpdateEnergy();
-	}
-
-	public void UpdateHP(int currentHP, int maxHP)
+	public void UpdateHP(int currentHP)
 	{
 		for (int i = 0; i < _hpSegments.Count; i++)
 		{
@@ -89,9 +83,9 @@ public class UIManager : MonoBehaviour
 	}
 
 	// 기존 Energy 업데이트 메서드
-	private void UpdateEnergy()
+	public void UpdateEnergy()
 	{
-		float energyRatio = _playerController.GetEnergyRatio();
+		float energyRatio = PlayerEnergy.GetEnergyRatio();
 
 		_energyGauge.fillAmount = Mathf.Lerp(_energyGauge.fillAmount, energyRatio, Time.deltaTime * _energyGaugeDamping);
 
@@ -133,24 +127,24 @@ public class UIManager : MonoBehaviour
 		_energyGauge.color = new Color(75 / 255f, 0, 130 / 255f);
 	}
 
-	public void ColorPanelEffect(Color color) {
+	public void ColorPanelEffect(Color color, float alpha) {
 		_colorPanelEffectTimer = 0;
-		StartCoroutine(ColorPanelEffectCoroutine(color));
+		StartCoroutine(ColorPanelEffectCoroutine(color, alpha));
 	}
 
-	private IEnumerator ColorPanelEffectCoroutine(Color color) {
+	private IEnumerator ColorPanelEffectCoroutine(Color color, float alpha) {
 		float t = 0;
-		while(t < 1) {
+		while(_colorPanel && t < 1) {
 			t = _colorPanelEffectTimer / _colorPanelEffectDuration;
-			_colorPanel.color = new Color(color.r, color.g, color.b, color.a * (1 - t) * _colorPanelEffectAlpha);
+			_colorPanel.color = new Color(color.r, color.g, color.b, color.a * (1 - t) * alpha);
 			_colorPanelEffectTimer += Time.deltaTime;
 			yield return null;
 		}
 	}
 
-	public void UpdateBullet(int currentBullet, int maxBullet)
+	public void UpdateBullet(int currentBullet)
 	{
-		_bulletText.text = currentBullet + " / " + maxBullet;
+		_bulletText.text = currentBullet + " / " + PlayerFire.MaxBullet;
 	}
 
 	private void SetCrosshairSize(float size)
