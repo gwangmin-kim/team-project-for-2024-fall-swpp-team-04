@@ -6,31 +6,34 @@ using UnityEngine.SceneManagement;
 public class PlayerHp : MonoBehaviour
 {
     public const int MaxHP = 5;
-    private static Color OnHitPanelColor = Color.red;
+    private static Color _onHitPanelColor = Color.red;
     private const float OnHitPanelAlpha = 0.3f;
-    public static int currentHP { get; private set; }
+    public static int CurrentHP { get; private set; }
     public static bool isAlive = true;
     
     public static void RecoverHp() {
-        currentHP = MaxHP;
+        isAlive = true;
+        CurrentHP = MaxHP;
         UIManager.Instance.UpdateHP(MaxHP);
     }
 
     // 피격 시 호출(외부에서)
-	public static void OnHit() {
+	public void OnHit() {
         if(!isAlive) {
             return;
         }
+        CurrentHP--;
         PlayerAudio.PlaySfxOnce(PlayerAudio.hitSound, PlayerAudio.HitSoundMaxVolume);
-        UIManager.Instance.UpdateHP(currentHP);
-        UIManager.Instance.ColorPanelEffect(OnHitPanelColor, OnHitPanelAlpha);
-        if(--currentHP <= 0) {
-            OnDie();
+        UIManager.Instance.UpdateHP(CurrentHP);
+        UIManager.Instance.ColorPanelEffect(_onHitPanelColor, OnHitPanelAlpha);
+        if(CurrentHP <= 0) {
+            StartCoroutine(OnDie());
         }
     }
 
-    private static void OnDie() {
+    private IEnumerator OnDie() {
         isAlive = false;
+        yield return null;
         SceneManager.LoadScene("GameOverScene");
     }
 }

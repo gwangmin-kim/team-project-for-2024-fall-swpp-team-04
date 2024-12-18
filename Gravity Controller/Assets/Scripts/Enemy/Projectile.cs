@@ -23,7 +23,7 @@ public class Projectile : MonoBehaviour
 			return;
 		}
 		if(other.CompareTag("Player")) {
-			PlayerHp.OnHit();
+			other.GetComponent<PlayerHp>().OnHit();
 		}
 		Destroy(gameObject);
 	}

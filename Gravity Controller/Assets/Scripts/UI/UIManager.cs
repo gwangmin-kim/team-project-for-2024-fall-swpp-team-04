@@ -134,7 +134,7 @@ public class UIManager : MonoBehaviour
 
 	private IEnumerator ColorPanelEffectCoroutine(Color color, float alpha) {
 		float t = 0;
-		while(t < 1) {
+		while(_colorPanel && t < 1) {
 			t = _colorPanelEffectTimer / _colorPanelEffectDuration;
 			_colorPanel.color = new Color(color.r, color.g, color.b, color.a * (1 - t) * alpha);
 			_colorPanelEffectTimer += Time.deltaTime;

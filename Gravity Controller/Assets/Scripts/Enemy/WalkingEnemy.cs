@@ -307,7 +307,7 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 		if (_attackSuccess)
 		{
 			Debug.Log("Attack Successful");
-			PlayerHp.OnHit();
+			_player.GetComponent<PlayerHp>().OnHit();
 		}
 		else
 		{

@@ -44,5 +44,7 @@ public class PlayerInput : MonoBehaviour
         MouseInputWheel = Input.GetAxis("Mouse ScrollWheel");
 
         IsInteractPressed = Input.GetKeyDown(InteractKey);
+        Debug.Log("input");
+        Debug.Log(HorizontalInput);
     }
 }
