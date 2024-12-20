@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class PlatformController : MonoBehaviour
 {
-	[SerializeField] private float _descentSpeed = 5f; 
+	[SerializeField] private float _descentSpeed = 5f;
 	private float _initialY;
-	private float _targetY; 
-	private bool _isPlayerOnPlatform = false; 
-	private bool _isMoving = false; 
+	private float _targetY;
+	private bool _isMoving = false;
 	private Rigidbody _rb;
 
 	private ParticleSystem[] _dust;
@@ -24,14 +23,14 @@ public class PlatformController : MonoBehaviour
 
 	void Start()
 	{
-		_initialY = transform.position.y; 
-		_targetY = _initialY - 5f; 
+		_initialY = transform.position.y;
+		_targetY = _initialY - 5f;
 
 		_rb = GetComponent<Rigidbody>();
 		if (_rb == null)
 		{
 			_rb = gameObject.AddComponent<Rigidbody>();
-			_rb.isKinematic = true; 
+			_rb.isKinematic = true;
 		}
 
 		_rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -45,11 +44,12 @@ public class PlatformController : MonoBehaviour
 
 	void OnCollisionEnter(Collision collision)
 	{
-		if (collision.collider.CompareTag("Player"))
+		if (collision.collider.CompareTag("Player") && !_isMoving) // 처음 밟았을 때만 동작
 		{
-			_isPlayerOnPlatform = true;
 			_isMoving = true;
-			if(!_audioSource.isPlaying) {
+
+			if (!_audioSource.isPlaying)
+			{
 				_audioSource.clip = _crackingSfx;
 				_audioSource.volume = _crackingSfxMaxVolume * GameManager.Instance.GetSFXVolume();
 				_audioSource.Play();
@@ -57,23 +57,11 @@ public class PlatformController : MonoBehaviour
 		}
 	}
 
-	void OnCollisionExit(Collision collision)
-	{
-		if (collision.collider.CompareTag("Player"))
-		{
-			_isPlayerOnPlatform = false;
-			_isMoving = false;
-			if(_audioSource.isPlaying) {
-				_audioSource.Stop();
-			}
-		}
-	}
-
 	void Update()
 	{
-		if (_isPlayerOnPlatform && _isMoving)
+		if (_isMoving)
 		{
-			foreach(ParticleSystem dustParticle in _dust)
+			foreach (ParticleSystem dustParticle in _dust)
 			{
 				dustParticle.Play();
 			}
@@ -92,7 +80,7 @@ public class PlatformController : MonoBehaviour
 
 	private void MovePlatform()
 	{
-		float step = _descentSpeed * Time.deltaTime; 
+		float step = _descentSpeed * Time.deltaTime;
 		Vector3 targetPosition = new Vector3(transform.position.x, _targetY, transform.position.z);
 		Vector3 newPosition = Vector3.MoveTowards(_rb.position, targetPosition, step);
 		_rb.MovePosition(newPosition);
@@ -100,7 +88,7 @@ public class PlatformController : MonoBehaviour
 		foreach (ParticleSystem dustParticle in _dust)
 		{
 			var main = dustParticle.main;
-			main.startColor = IsEmergency() ? (Color) new Color32(0x60, 0x37, 0x3e, 0xff) : (Color) new Color32(0x67, 0x63, 0x5d, 0xff);
+			main.startColor = IsEmergency() ? (Color)new Color32(0x60, 0x37, 0x3e, 0xff) : (Color)new Color32(0x67, 0x63, 0x5d, 0xff);
 
 			var mult = main.startSpeedMultiplier;
 			var em = dustParticle.emission;
@@ -112,7 +100,7 @@ public class PlatformController : MonoBehaviour
 		{
 			_rb.position = targetPosition;
 			_isMoving = false;
-			
+
 			var sparkle = transform.parent.Find("SparkleDust");
 			sparkle.position = newPosition;
 			var main = sparkle.GetComponent<ParticleSystem>().main;
