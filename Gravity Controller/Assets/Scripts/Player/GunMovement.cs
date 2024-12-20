@@ -79,7 +79,7 @@ public class GunMovement : MonoBehaviour
 			return;
 
 		// Get the current movement speed
-		float speed = _playerMovement._moveSpeedGun;
+		float speed = _playerMovement.MoveSpeedGun;
 
 		// Start movement sway only if not animating
 		if (speed > 0.1f && !_isAnimating)
@@ -117,7 +117,7 @@ public class GunMovement : MonoBehaviour
 
 		float swayPhase = 0f;
 
-		while (_playerMovement != null && _playerMovement._moveSpeedGun > 0.1f && !_isAnimating)
+		while (_playerMovement != null && _playerMovement.MoveSpeedGun > 0.1f && !_isAnimating)
 		{
 			swayPhase += Time.deltaTime * _movementSwaySpeed;
 

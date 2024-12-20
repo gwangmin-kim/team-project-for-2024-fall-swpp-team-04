@@ -13,35 +13,20 @@ public class PlayerMovement : MonoBehaviour
     private float _groundDrag = 7f; // prevent slippery
     private float _airMultiplier = 0.3f; // lower force when player is not grounded
     
-    public float _moveSpeedGun;
-    public float _maxSpeedGun;
+    public float MoveSpeedGun { get; private set; }
 
-	[Header("Footstep Audio Settings")]
-	[SerializeField] private float _footstepInterval = 0.5f;
-
+    private const float FootStepInterval = 0.3f;
 	private float _footstepTimer = 0f;
 
-	void Start() {
+    private void Start() {
         Gun = transform.GetChild(0).GetChild(0).gameObject;
-
-        _maxSpeedGun = _maxSpeed;
+    }
+    public void SetMoveSpeedGun() {
+        Vector3 flatVelocity = new Vector3(PlayerController.Rigid.velocity.x, 0f, PlayerController.Rigid.velocity.z);
+		MoveSpeedGun = flatVelocity.magnitude;
     }
 
-    private void FixedUpdate() {
-		Vector3 flatVelocity = new Vector3(PlayerController.Rigid.velocity.x, 0f, PlayerController.Rigid.velocity.z);
-		_moveSpeedGun = flatVelocity.magnitude;
-
-        GroundChecker.GroundCheck(transform.position);
-        MovePlayer();
-        HandleDrag();
-	}
-
-    void Update() {
-        ControlSpeed();
-		HandleFootsteps();
-	}
-
-    private void ControlSpeed()
+    public void ControlSpeed()
     {
         Vector3 flatVel = new Vector3(PlayerController.Rigid.velocity.x, 0f, PlayerController.Rigid.velocity.z);
 
@@ -53,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void MovePlayer()
+    public void MovePlayer()
     {
         // calculate movement direction
         Vector3 moveDirection = transform.forward * PlayerInput.VerticalInput 
@@ -67,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     
-    private void HandleDrag() {
+    public void HandleDrag() {
         if(GroundChecker.IsGrounded) {
             PlayerController.Rigid.drag = _groundDrag;
         } else {
@@ -75,12 +60,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmosSelected() {
-        Gizmos.color = Color.green;
-        Gizmos.DrawRay(transform.position, transform.forward * 5f);
-    }
-
-	private void HandleFootsteps()
+	public void HandleFootsteps()
 	{
 		Vector3 flatVel = new Vector3(PlayerController.Rigid.velocity.x, 0f, PlayerController.Rigid.velocity.z);
 		bool hasInput = Mathf.Abs(PlayerInput.HorizontalInput) > 0.1f 
@@ -92,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
 		if (currentCondition)
 		{
 			_footstepTimer += Time.deltaTime;
-			if (_footstepTimer >= _footstepInterval) {
+			if (_footstepTimer >= FootStepInterval) {
                 PlayerAudio.PlaySfxOnce(PlayerAudio.footstepSound, PlayerAudio.FootstepMaxVolume);
 				_footstepTimer = 0f;
 			}

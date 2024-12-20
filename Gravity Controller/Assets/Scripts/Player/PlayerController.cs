@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private Gravity _playerGravity;
     private PlayerEnergy _playerEnergy;
     private PlayerInteract _playerInteract;
+    private PlayerMovement _playerMovement;
 
     private void Start() {
         Rigid = GetComponent<Rigidbody>();
@@ -30,26 +31,31 @@ public class PlayerController : MonoBehaviour
         _playerGravity = GetComponent<Gravity>();
         _playerEnergy = GetComponent<PlayerEnergy>();
         _playerInteract = GetComponent<PlayerInteract>();
+        _playerMovement = GetComponent<PlayerMovement>();
 
         InitState();
     }
 
 	private void FixedUpdate() {
-        _playerGravity.HandlePhysics();
         GroundChecker.GroundCheck(transform.position);
+        _playerGravity.HandlePhysics();
+        _playerMovement.SetMoveSpeedGun();
+        _playerMovement.MovePlayer();
+        _playerMovement.HandleDrag();
     }
     void Update() {
         if(!PlayerHp.isAlive) {
             return;
         }
         _playerInput.GetInput();
+        _playerMovement.ControlSpeed();
         _playerCamera.HandleInput();
         _playerJump.HandleInput();
         _playerFire.HandleInput();
         _playerGravity.HandleInput();
-
         _playerEnergy.UpdateEnergy();
         _playerInteract.CheckInteraction();
+        _playerMovement.HandleFootsteps();
     }
 
 
