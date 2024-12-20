@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.ShortcutManagement;
 using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
@@ -8,8 +7,8 @@ public class PlayerCamera : MonoBehaviour
     public static GameObject Camera { get; private set; }
     // mouse sensetivity
     private static float _sensitivityMultiplier = 0.5f;
-    private const float SensetivityX = 500f;
-    private const float SensetivityY = 500f;
+    private const float SensetivityX = 250f;
+    private const float SensetivityY = 250f;
     private const float SensitivityMultiplierMin = 0.1f;
 	private const float SensitivityMultiplierMax = 1.9f;
 

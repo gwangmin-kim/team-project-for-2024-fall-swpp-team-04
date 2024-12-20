@@ -499,9 +499,10 @@ public class FlyingEnemy : MonoBehaviour, IEnemy, ISkillReceiver, IAttackReceive
 		Gizmos.DrawWireSphere(transform.position, _attackRangeHorizontal);
 	}
 
-	public void OnHit()
+	public void OnHit(int damage)
 	{
-		if (--_hp <= 0)
+		_hp -= damage;
+		if (_hp <= 0)
 		{
 			OnDeath();
 		}

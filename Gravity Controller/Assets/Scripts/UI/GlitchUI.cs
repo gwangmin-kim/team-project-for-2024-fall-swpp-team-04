@@ -7,7 +7,6 @@ public class GlitchUI : MonoBehaviour
 {
 	public Text _gameOverText;
 	[SerializeField] private float _glitchDuration = 0.1f;
-	[SerializeField] private float _glitchInterval = 0.5f;
 
 	[SerializeField] private AudioSource _audioSource;    
 	[SerializeField] private AudioClip _glitchSound;

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ComponentAttackReceiver : MonoBehaviour, IAttackReceiver
 {
 	[SerializeField] private int _depth;
-	public void OnHit()
+	public void OnHit(int damage)
 	{
 		Transform target = transform;
 		for (int i = 0; i < _depth; i++)
@@ -14,6 +14,6 @@ public class ComponentAttackReceiver : MonoBehaviour, IAttackReceiver
 		}
 		var targetAttackReceiver = target.GetComponent<IAttackReceiver>();
 		if (targetAttackReceiver == null) return;
-		targetAttackReceiver.OnHit();
+		targetAttackReceiver.OnHit(damage);
 	}
 }

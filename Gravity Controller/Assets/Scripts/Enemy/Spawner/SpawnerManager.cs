@@ -9,7 +9,6 @@ public class SpawnerManager : MonoBehaviour
 	[SerializeField] private List<int> _enemyCounts;
 	[SerializeField] private List<float> _customDelays;
 	private List<IEnemyFactory> _spawners = new List<IEnemyFactory>();
-	private int _spawnCount = 0;
 
 	void Start()
 	{
