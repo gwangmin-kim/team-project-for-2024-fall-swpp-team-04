@@ -43,19 +43,21 @@ public class PlayerController : MonoBehaviour
         _playerMovement.MovePlayer();
         _playerMovement.HandleDrag();
     }
-    void Update() {
+    private void Update() {
         if(!PlayerHp.isAlive) {
             return;
         }
         _playerInput.GetInput();
         _playerMovement.ControlSpeed();
-        _playerCamera.HandleInput();
         _playerJump.HandleInput();
         _playerFire.HandleInput();
         _playerGravity.HandleInput();
         _playerEnergy.UpdateEnergy();
         _playerInteract.CheckInteraction();
         _playerMovement.HandleFootsteps();
+    }
+    private void LateUpdate() {
+        _playerCamera.HandleInput();
     }
 
 
