@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerFire : MonoBehaviour
 {
+    [SerializeField] private GameObject _sparkParticle;
+
     public const int MaxBullet = 10;
     private const float ShootCooldown = 0.5f;
     private const float ReloadTime = 2f;
@@ -34,12 +36,12 @@ public class PlayerFire : MonoBehaviour
         if(currentBullet-- > 0) {
             _isShootable = false;
 			PlayerAudio.PlaySfxOnce(PlayerAudio.fireSound, PlayerAudio.FireSoundMaxVolume);
-            PlayerComponents.Gun.SendMessage("HandleRecoil", SendMessageOptions.DontRequireReceiver);
-			Transform cameraTransform = PlayerComponents.PlayerCamera.transform;
+            PlayerMovement.Gun.SendMessage("HandleRecoil", SendMessageOptions.DontRequireReceiver);
+			Transform cameraTransform = PlayerCamera.Camera.transform;
             RaycastHit hit;
             if(Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit)) {
                 // 여기에서 맞은 대상의 오브젝트 가져올 수 있음
-				Instantiate(PlayerComponents.SparkParticle, hit.point, Quaternion.identity);
+				Instantiate(_sparkParticle, hit.point, Quaternion.identity);
 				var targetAttackReceiver = hit.collider.gameObject.GetComponent<IAttackReceiver>();
 				if (targetAttackReceiver != null)
 				{
@@ -62,7 +64,7 @@ public class PlayerFire : MonoBehaviour
         _isShootable = false;
 
         PlayerAudio.PlaySfxOnce(PlayerAudio.reloadSound, PlayerAudio.ReloadSoundMaxVolume);
-        PlayerComponents.Gun.SendMessage("HideGunOnReload", SendMessageOptions.DontRequireReceiver);
+        PlayerMovement.Gun.SendMessage("HideGunOnReload", SendMessageOptions.DontRequireReceiver);
 		StartCoroutine(ReShootable());
     }
 

@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public static int Stage { get; private set; } = 1;
+    public static Rigidbody Rigid { get; private set; }
+
     private PlayerInput _playerInput;
     private PlayerCamera _playerCamera;
     private PlayerJump _playerJump;
@@ -19,6 +21,8 @@ public class PlayerController : MonoBehaviour
     private PlayerInteract _playerInteract;
 
     private void Start() {
+        Rigid = GetComponent<Rigidbody>();
+        
         _playerInput = GetComponent<PlayerInput>();
         _playerCamera = GetComponent<PlayerCamera>();
         _playerJump = GetComponent<PlayerJump>();

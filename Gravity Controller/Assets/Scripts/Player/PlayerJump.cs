@@ -15,7 +15,7 @@ public class PlayerJump : MonoBehaviour
     }
 
     private void Jump() {
-        Rigidbody rigid = PlayerComponents.Rigid;
+        Rigidbody rigid = PlayerController.Rigid;
         GroundChecker.IsGrounded = false;
         float jumpMultiplier = Gravity.IsGravityLow ? JumpMultiplier : 1f;
         rigid.velocity = new Vector3(rigid.velocity.x, 0f, rigid.velocity.z);
