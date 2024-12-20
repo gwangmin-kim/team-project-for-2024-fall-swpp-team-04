@@ -7,7 +7,7 @@ public class PlayerInteract : MonoBehaviour
     private const float InteractiveRange = 5f;
     
     public void CheckInteraction() {
-        Transform cameraTransform = PlayerComponents.PlayerCamera.transform;
+        Transform cameraTransform = PlayerCamera.Camera.transform;
 		RaycastHit hit;
 		if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, InteractiveRange)) {
 			GameObject targetObject = hit.collider.gameObject;

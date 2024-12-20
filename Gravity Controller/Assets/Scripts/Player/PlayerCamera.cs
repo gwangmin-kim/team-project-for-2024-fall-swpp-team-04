@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
+    public static GameObject Camera { get; private set; }
     // mouse sensetivity
     private static float _sensitivityMultiplier = 0.5f;
     private const float SensetivityX = 500f;
@@ -16,6 +17,10 @@ public class PlayerCamera : MonoBehaviour
     private float _accumRotationX = 0;
     private float _accumRotationY = 0;
     private const float RotationLimitY = 80;
+
+    private void Start() {
+        Camera = transform.GetChild(0).gameObject;
+    }
 
     public static void SetSensitivityMultiplier(int percentage) {
 		_sensitivityMultiplier = SensitivityMultiplierMin + (SensitivityMultiplierMax - SensitivityMultiplierMin) * ((float)percentage) / 100;
@@ -38,6 +43,6 @@ public class PlayerCamera : MonoBehaviour
 
     public void Rotate() {
         transform.eulerAngles = new Vector3(0, _accumRotationX, 0);
-        PlayerComponents.PlayerCamera.transform.eulerAngles = new Vector3(-_accumRotationY, _accumRotationX, 0);
+        Camera.transform.eulerAngles = new Vector3(-_accumRotationY, _accumRotationX, 0);
     }
 }

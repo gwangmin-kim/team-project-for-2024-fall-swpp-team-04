@@ -43,7 +43,7 @@ public class Gravity : MonoBehaviour
     public void HandlePhysics() {
         // 낮아진 전체 중력에 대한 처리, 플레이어에게만 영향을 줌
         if(IsGravityLow) {
-            PlayerComponents.Rigid.AddForce(Physics.gravity * (GravityForceLow - 1f), ForceMode.Impulse);
+            PlayerController.Rigid.AddForce(Physics.gravity * (GravityForceLow - 1f), ForceMode.Impulse);
         }
     }
 
@@ -52,7 +52,7 @@ public class Gravity : MonoBehaviour
         if(!_isTargetable || PlayerEnergy.currentEnergy < LocalEnergyCost) {
             return;
         }
-        Transform cameraTransform = PlayerComponents.PlayerCamera.transform;
+        Transform cameraTransform = PlayerCamera.Camera.transform;
         RaycastHit hit;
         if(Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit)) {
 			ISkillReceiver targetSkillReceiver =  hit.collider.gameObject.GetComponent<ISkillReceiver>();
@@ -65,7 +65,7 @@ public class Gravity : MonoBehaviour
 
 				// 여기서 피격된 대상의 오브젝트를 불러올 수 있음
 				targetSkillReceiver.ReceiveSkill();
-				PlayerComponents.Gun.SendMessage("HideGunOnSkill", SendMessageOptions.DontRequireReceiver);
+				PlayerMovement.Gun.SendMessage("HideGunOnSkill", SendMessageOptions.DontRequireReceiver);
 			}
         }
     }
@@ -96,7 +96,7 @@ public class Gravity : MonoBehaviour
         }
         PlayerEnergy.currentEnergy -= GlobalHighEnergyCost;
         PlayerAudio.PlaySfxOnce(PlayerAudio.globalGravityHighSound, PlayerAudio.GlobalGravityHighSoundMaxVolume);
-		PlayerComponents.Gun.SendMessage("HideGunOnSkill", SendMessageOptions.DontRequireReceiver);
+		PlayerMovement.Gun.SendMessage("HideGunOnSkill", SendMessageOptions.DontRequireReceiver);
 		
         StartCoroutine(SendGravitySkill(gameObjects));
     }

@@ -6,6 +6,8 @@ using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static GameObject Gun { get; private set; }
+
     private float _moveForce = 10000f; // force moving player
     private float _maxSpeed = 20f; // limit max speed of player
     private float _groundDrag = 7f; // prevent slippery
@@ -20,11 +22,13 @@ public class PlayerMovement : MonoBehaviour
 	private float _footstepTimer = 0f;
 
 	void Start() {
+        Gun = transform.GetChild(0).GetChild(0).gameObject;
+
         _maxSpeedGun = _maxSpeed;
     }
 
     private void FixedUpdate() {
-		Vector3 flatVelocity = new Vector3(PlayerComponents.Rigid.velocity.x, 0f, PlayerComponents.Rigid.velocity.z);
+		Vector3 flatVelocity = new Vector3(PlayerController.Rigid.velocity.x, 0f, PlayerController.Rigid.velocity.z);
 		_moveSpeedGun = flatVelocity.magnitude;
 
         GroundChecker.GroundCheck(transform.position);
@@ -39,13 +43,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void ControlSpeed()
     {
-        Vector3 flatVel = new Vector3(PlayerComponents.Rigid.velocity.x, 0f, PlayerComponents.Rigid.velocity.z);
+        Vector3 flatVel = new Vector3(PlayerController.Rigid.velocity.x, 0f, PlayerController.Rigid.velocity.z);
 
         // limit velocity if needed
         if(flatVel.magnitude > _maxSpeed)
         {
             Vector3 limitedVel = flatVel.normalized * _maxSpeed;
-            PlayerComponents.Rigid.velocity = new Vector3(limitedVel.x, PlayerComponents.Rigid.velocity.y, limitedVel.z);
+            PlayerController.Rigid.velocity = new Vector3(limitedVel.x, PlayerController.Rigid.velocity.y, limitedVel.z);
         }
     }
 
@@ -57,17 +61,17 @@ public class PlayerMovement : MonoBehaviour
 
         // on ground
         if(GroundChecker.IsGrounded) {
-            PlayerComponents.Rigid.AddForce(moveDirection.normalized * _moveForce, ForceMode.Force);
+            PlayerController.Rigid.AddForce(moveDirection.normalized * _moveForce, ForceMode.Force);
         } else {
-            PlayerComponents.Rigid.AddForce(moveDirection.normalized * _moveForce * _airMultiplier, ForceMode.Force);
+            PlayerController.Rigid.AddForce(moveDirection.normalized * _moveForce * _airMultiplier, ForceMode.Force);
         }
     }
     
     private void HandleDrag() {
         if(GroundChecker.IsGrounded) {
-            PlayerComponents.Rigid.drag = _groundDrag;
+            PlayerController.Rigid.drag = _groundDrag;
         } else {
-            PlayerComponents.Rigid.drag = 0;
+            PlayerController.Rigid.drag = 0;
         }
     }
 
@@ -78,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private void HandleFootsteps()
 	{
-		Vector3 flatVel = new Vector3(PlayerComponents.Rigid.velocity.x, 0f, PlayerComponents.Rigid.velocity.z);
+		Vector3 flatVel = new Vector3(PlayerController.Rigid.velocity.x, 0f, PlayerController.Rigid.velocity.z);
 		bool hasInput = Mathf.Abs(PlayerInput.HorizontalInput) > 0.1f 
                         || Mathf.Abs(PlayerInput.VerticalInput) > 0.1f;
 		bool isMoving = flatVel.magnitude > 0.1f;
