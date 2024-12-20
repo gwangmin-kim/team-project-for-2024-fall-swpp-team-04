@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IAttackReceiver
 {
-	public void OnHit();
+	public void OnHit(int damage);
 }

@@ -66,7 +66,8 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 		State = EnemyState.Idle;
 	}
 
-	void Start() {
+	void Start()
+	{
 		_player = GameObject.Find("Player");
 
 		_animator = transform.GetChild(0).GetComponent<Animator>();
@@ -81,43 +82,22 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 		BeforeWander();
 	}
 
-	// fix: 구조를 조금 더 깔끔하게 변경
-	/*
-	void Update() {
-		float distanceToPlayer = Vector3.Distance(transform.position, _player.transform.position);
-
-		if(!_isChasing) {
-			if(distanceToPlayer < _chaseRange) { // player firstly detected
-				_isChasing = true;
-				_animator.SetBool("IsRunning", true);
-			} else { // player not detected
-				_isChasing = false;
-				_animator.SetBool("IsWalking", true);
-				Wander();
-			}
-		} else { // player detected
-			if(distanceToPlayer < _attackRange) { // if close enough
-				Attack();
-			} else {
-				Chase();
-			}
-		}
-	}
-	*/
-
-	private void FixedUpdate()
+	void FixedUpdate()
 	{
 		if (_isDead) return;
 
-		var relativePosition = _player.transform.position + _playerHeightOffset * new Vector3(0, 1, 0) - transform.position - _heightOffset * new Vector3(0, 1, 0);
-		float distanceHorizontal = Vector3.Scale(relativePosition, new Vector3(1, 0, 1)).magnitude;
+		var relativePosition = _player.transform.position + _playerHeightOffset * Vector3.up - transform.position - _heightOffset * Vector3.up;
+		float distanceHorizontal = new Vector3(relativePosition.x, 0, relativePosition.z).magnitude;
 		float distanceVertical = transform.position.y - _player.transform.position.y;
 		RaycastHit hit;
 		bool playerInSight = false;
 
 		_awarenessCoolDownTimer -= Time.fixedDeltaTime;
 
-		if (Physics.Raycast(transform.position + _heightOffset * new Vector3(0,1,0) + _frontOffset * (transform.rotation * new Vector3(0, 0, 1)), Vector3.Scale(relativePosition, new Vector3(1, 0, 1)), out hit, _sightRange))
+		// Raycast to check if player is in sight
+		Vector3 rayOrigin = transform.position + _heightOffset * Vector3.up + _frontOffset * (transform.forward);
+		Vector3 rayDirection = new Vector3(relativePosition.x, 0, relativePosition.z).normalized;
+		if (Physics.Raycast(rayOrigin, rayDirection, out hit, _sightRange))
 		{
 			playerInSight = hit.collider.gameObject.CompareTag("Player");
 			if (playerInSight)
@@ -131,63 +111,51 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 		switch (State)
 		{
 			case EnemyState.Idle:
-				if ((distanceHorizontal <= _chaseRange) && playerInSight)
-				//if (playerInSight)
-					{
+				if (playerInSight && distanceHorizontal <= _chaseRange)
+				{
 					// Idle -> Aware
 					State = EnemyState.Aware;
 					_animator.SetBool("IsRunning", true);
 					_animator.SetBool("IsWalking", false);
 					Chase();
-					break;
 				}
-				Wander();
+				else
+				{
+					Wander();
+				}
 				break;
+
 			case EnemyState.Aware:
-				if (!playerInSight || !(distanceHorizontal <= _chaseRange))
-				//if (!playerInSight)
-					{
-					// cannot see the player || player not in range
+				if (!playerInSight || distanceHorizontal > _chaseRange)
+				{
 					if (_awarenessCoolDownTimer > 0)
 					{
 						// Aware -> Follow
 						State = EnemyState.Follow;
+						_animator.SetBool("IsRunning", true);
+						_animator.SetBool("IsWalking", false);
 						_audioSource.volume = _followingSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 						_audioSource.PlayOneShot(_followingSound);
 						Follow();
-						break;
 					}
-					// Aware -> Idle
-					_animator.SetBool("IsRunning", false);
-					State = EnemyState.Idle;
-					BeforeWander();
-					Wander();
-					break;
-				}
-
-				Chase();
-				break;
-			case EnemyState.Follow:
-				if (_awarenessCoolDownTimer <= 0 || _lastSeenPosition == transform.position)
-				{
-					// time's up || lost player
-					// Follow -> Idle
-					_animator.SetBool("IsRunning", false);
-					State = EnemyState.Idle;
-					BeforeWander();
-					Wander();
-					break;
-				}
-				if (distanceHorizontal <= _chaseRange)
-				//if (playerInSight)
+					else
 					{
-					// gotcha
-					// Follow -> Aware
-					State = EnemyState.Aware;
-					Chase();
-					break;
+						// Aware -> Idle
+						State = EnemyState.Idle;
+						_animator.SetBool("IsRunning", false);
+						BeforeWander();
+						Wander();
+					}
 				}
+				else
+				{
+					Chase();
+				}
+				break;
 
+			case EnemyState.Follow:
+
+				_animator.SetBool("IsRunning", true);
 				Follow();
 				break;
 		}
@@ -202,50 +170,42 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 		_timer = 0f;
 	}
 
-	private void Wander() {
+	private void Wander()
+	{
 		_timer += Time.deltaTime;
 		RaycastHit hit;
-		if (Physics.Raycast(transform.position + _heightOffset * new Vector3(0, 1, 0) + _frontOffset * (transform.rotation * new Vector3(0, 0, 1)), _currentDirection, out hit, _obstacleDetectionRange))
+
+		// Raycast in the current direction to detect obstacles
+		Vector3 rayOrigin = transform.position + _heightOffset * Vector3.up + _frontOffset * transform.forward;
+		if (Physics.Raycast(rayOrigin, _currentDirection, out hit, _obstacleDetectionRange))
 		{
-			// detected an obstacle while moving
-			Debug.Log("detected an obstacle:" + hit.collider.name);
+			// Detected an obstacle while moving
+			Debug.Log("Detected an obstacle: " + hit.collider.name);
 			SetRandomDirection();
 			_timer = 0f;
 		}
-		else if (_timer > _changeDirectionInterval) {
-			// phase transition: moving <-> rotating
+		else if (_timer > _changeDirectionInterval)
+		{
+			// Time to change direction
 			if (Vector3.Distance(_spawnPoint, transform.position) > _wanderRange)
 			{
-				// too far from origin
-				_currentDirection = Vector3.Scale(_spawnPoint - transform.position, new Vector3(1, 0, 1)).normalized;
+				// Too far from spawn point, move back towards it
+				_currentDirection = new Vector3(_spawnPoint.x - transform.position.x, 0, _spawnPoint.z - transform.position.z).normalized;
 			}
 			else
 			{
-				// okay to go
+				// Choose a new random direction
 				SetRandomDirection();
 			}
 			SetRandomInterval();
 			_timer = 0f;
 		}
-		/*
-		else if(Vector3.Distance(_spawnPoint, transform.position) > _wanderRange) {
-			// 일정 범위를 벗어나지 못하도록
-			_currentDirection = (_spawnPoint - transform.position).normalized;
-			_timer = 0f;
-		} else if(Physics.Raycast(transform.position, _currentDirection, _obstacleDetectionRange)) {
-			// 장애물을 만나면 다른 방향으로
-			SetRandomDirection();
-			_timer = 0f;
-		}
-		*/
 
-		// rotate
-		Quaternion targetRotation = Quaternion.LookRotation(_currentDirection);
-		Quaternion targetRotationHorizontal = Quaternion.LookRotation(Vector3.Scale(_currentDirection, new Vector3(1, 0, 1)));
-		var tempRotation = Quaternion.Slerp(transform.rotation, targetRotationHorizontal, Time.fixedDeltaTime * _rotationSpeed);
-		transform.rotation = tempRotation;
+		// Rotate smoothly towards the current direction
+		Quaternion targetRotationHorizontal = Quaternion.LookRotation(new Vector3(_currentDirection.x, 0, _currentDirection.z));
+		transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationHorizontal, Time.fixedDeltaTime * _rotationSpeed);
 
-		// move
+		// Move forward
 		transform.Translate(Vector3.forward * Time.fixedDeltaTime * _wanderSpeed);
 	}
 
@@ -260,14 +220,15 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 		_currentDirection = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), 0, Mathf.Sin(angle * Mathf.Deg2Rad)).normalized;
 	}
 
-	// fix: 플레이어의 높낮이의 변화가 있으면 문제가 생길 것 같아서 수정
-	private void Chase() {
-		// not to be confused with FlyingEnemy.ChasePlayer(); this method is for EnemyState.Aware
-		if(_isAttacking) {
+	// Modified Chase method to ensure consistent behavior
+	private void Chase()
+	{
+		if (_isAttacking)
+		{
 			return;
 		}
 
-		float distanceToPlayer = Vector3.Scale(transform.position - _player.transform.position, new Vector3(1, 0, 1)).magnitude;
+		float distanceToPlayer = new Vector3(transform.position.x - _player.transform.position.x, 0, transform.position.z - _player.transform.position.z).magnitude;
 
 		if (distanceToPlayer < _attackRange)
 		{
@@ -275,14 +236,16 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 			return;
 		}
 
-		Vector3 direction = Vector3.Scale(_player.transform.position - transform.position, new Vector3(1, 0, 1)).normalized;
+		Vector3 direction = new Vector3(_player.transform.position.x - transform.position.x, 0, _player.transform.position.z - transform.position.z).normalized;
 		transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), Time.fixedDeltaTime * _rotationSpeed);
 		transform.Translate(Vector3.forward * _chaseSpeed * Time.deltaTime);
 		_spawnPoint = transform.position;
 	}
 
-	private void Attack() {
-		if(_isAttacking) {
+	private void Attack()
+	{
+		if (_isAttacking)
+		{
 			return;
 		}
 
@@ -292,16 +255,17 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 		StartCoroutine(ResetAttack());
 	}
 
-	// fix: Invoke 대신 Coroutine 사용하는 구조로 변경
-	IEnumerator ResetAttack() {
+	IEnumerator ResetAttack()
+	{
 		yield return new WaitForSeconds(_attackAnimationLength);
 
 		_isAttacking = false;
 		_animator.SetBool("Attack", false);
 	}
 
-	// fix: player controller가 유효한지 검사하는 과정 삭제
-	public void AttackHitCheck() {
+	// Modified AttackHitCheck to remove player controller validation
+	public void AttackHitCheck()
+	{
 		_audioSource.volume = _attackingSoundMaxVolume * GameManager.Instance.GetSFXVolume();
 		_audioSource.PlayOneShot(_attackingSound);
 		if (_attackSuccess)
@@ -313,17 +277,6 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 		{
 			Debug.Log("Attack Fail");
 		}
-		
-		/*
-		float distanceToPlayer = Vector3.Distance(transform.position, _player.transform.position);
-
-		if(distanceToPlayer < _attackHitRange) {
-			Debug.Log("Attack Successful");
-			_player.GetComponent<PlayerController>().OnHit();
-		} else {
-			Debug.Log("Attack Fail");
-		}
-		*/
 	}
 
 	public void SetAttackSuccess(bool success)
@@ -331,45 +284,77 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 		_attackSuccess = success;
 	}
 
+	// Modified Follow method to include obstacle detection and prevent state transitions
 	private void Follow()
 	{
-		Vector3 directionToPlayer = _lastSeenPosition - transform.position;
-		Vector3 directionToPlayerHorizontal = Vector3.Scale(directionToPlayer, new Vector3(1, 0, 1));
+		if (_isAttacking)
+		{
+			return;
+		}
 
-		// rotate
-		Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
-		Quaternion targetRotationHorizontal = Quaternion.LookRotation(directionToPlayerHorizontal);
-		var tempRotation = Quaternion.Slerp(transform.rotation, targetRotationHorizontal, Time.fixedDeltaTime * _rotationSpeed);
-		transform.rotation = tempRotation;
+		Vector3 directionToLastSeen = _lastSeenPosition - transform.position;
+		Vector3 directionToLastSeenHorizontal = new Vector3(directionToLastSeen.x, 0, directionToLastSeen.z).normalized;
 
-		// move
-		Vector3 dir = Vector3.zero;
-		Vector3 target = Vector3.zero;
+		// Raycast to detect obstacles in the follow direction
+		RaycastHit hit;
+		Vector3 rayOrigin = transform.position + _heightOffset * Vector3.up + _frontOffset * transform.forward;
+		if (Physics.Raycast(rayOrigin, directionToLastSeenHorizontal, out hit, _obstacleDetectionRange))
+		{
+			if (!hit.collider.gameObject.CompareTag("Player"))
+			{
+				// Obstacle detected, change direction
+				Debug.Log("Obstacle detected while following: " + hit.collider.name);
+				SetRandomDirection();
+				SetRandomInterval();
+				_timer = 0f;
+			}
+		}
 
+		// Rotate smoothly towards the last seen position
+		Quaternion targetRotationHorizontal = Quaternion.LookRotation(directionToLastSeenHorizontal);
+		transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationHorizontal, Time.fixedDeltaTime * _rotationSpeed);
 
-		target += directionToPlayerHorizontal.normalized;
-		
-		dir = target.normalized * Time.fixedDeltaTime * _chaseSpeed;
+		Vector3 movementDirection;
+		if (hit.collider != null && !hit.collider.gameObject.CompareTag("Player"))
+		{
+			movementDirection = _currentDirection;
+		}
+		else
+		{
+			movementDirection = directionToLastSeenHorizontal;
+		}
 
-		transform.Translate(Quaternion.Inverse(transform.rotation) * dir);
+		// Move towards the target direction
+		Vector3 movement = movementDirection * _chaseSpeed * Time.fixedDeltaTime;
+		transform.Translate(movement, Space.World);
+		// Update spawn point to current position to keep the enemy within wander range
+		float distanceToPlayer = new Vector3(transform.position.x - _player.transform.position.x, 0, transform.position.z - _player.transform.position.z).magnitude;
+
+		if (distanceToPlayer < _attackRange)
+		{
+			Attack();
+			return;
+		}
 		_spawnPoint = transform.position;
 	}
 
-	private void OnDrawGizmosSelected() {
+	private void OnDrawGizmosSelected()
+	{
 		Gizmos.color = Color.red;
-		Gizmos.DrawRay(transform.position, _currentDirection * _obstacleDetectionRange);
+		Gizmos.DrawRay(transform.position + _heightOffset * Vector3.up + _frontOffset * transform.forward, _currentDirection * _obstacleDetectionRange);
 		Gizmos.DrawWireSphere(transform.position, _attackRange);
 		Gizmos.color = Color.green;
 		Gizmos.DrawWireSphere(_spawnPoint, _wanderRange);
 		Gizmos.color = Color.blue;
 		Gizmos.DrawWireSphere(transform.position, _chaseRange);
 		Gizmos.color = Color.yellow;
-		Gizmos.DrawRay(transform.position + _heightOffset * new Vector3(0, 1, 0) + _frontOffset * (transform.rotation * new Vector3(0, 0, 1)), _obstacleDetectionRange * (transform.rotation * new Vector3(0, 0, 1)));
+		Gizmos.DrawRay(transform.position + _heightOffset * Vector3.up + _frontOffset * transform.forward, transform.forward * _obstacleDetectionRange);
 	}
 
-	public void OnHit()
+	public void OnHit(int damage)
 	{
-		if (--_hp <= 0)
+		_hp -= damage;
+		if (_hp <= 0)
 		{
 			OnDeath();
 		}
@@ -378,7 +363,8 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 
 	public void OnDeath()
 	{
-		if(_isDead) {
+		if (_isDead)
+		{
 			return;
 		}
 		_isDead = true;
@@ -406,9 +392,10 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 		while (timer < _dissolveTime)
 		{
 			timer += Time.deltaTime;
-			foreach (var rend in gameObject.GetComponentsInChildren<Renderer>()) 
+			foreach (var rend in gameObject.GetComponentsInChildren<Renderer>())
 			{
-				foreach(var mat in rend.materials){
+				foreach (var mat in rend.materials)
+				{
 					mat.SetFloat("_DissolveProgress", timer * _dissolveSpeed);
 				}
 			};

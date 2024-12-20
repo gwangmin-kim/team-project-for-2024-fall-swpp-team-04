@@ -199,7 +199,7 @@ public class UIManager : MonoBehaviour
 		_progressBar.value = 0;
 		_progressBar.gameObject.SetActive(true);
 
-		float duration = 60f;
+		float duration = 28f;
 		float elapsed = 0f;
 
 		while (elapsed < duration)

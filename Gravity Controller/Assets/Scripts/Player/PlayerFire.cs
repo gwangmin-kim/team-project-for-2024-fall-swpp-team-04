@@ -9,6 +9,7 @@ public class PlayerFire : MonoBehaviour
     public const int MaxBullet = 10;
     private const float ShootCooldown = 0.5f;
     private const float ReloadTime = 2f;
+    private const int _damage = 3;
 
     public static int currentBullet;
     public bool _isShootable = true;
@@ -45,7 +46,7 @@ public class PlayerFire : MonoBehaviour
 				var targetAttackReceiver = hit.collider.gameObject.GetComponent<IAttackReceiver>();
 				if (targetAttackReceiver != null)
 				{
-					targetAttackReceiver.OnHit();
+					targetAttackReceiver.OnHit(_damage);
                 }
             }
             UIManager.Instance.UpdateBullet(currentBullet);

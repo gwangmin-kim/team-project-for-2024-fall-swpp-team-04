@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class PlatformController : MonoBehaviour
 {
-	[SerializeField] private float _descentSpeed = 1f; // �ʴ� �ϰ� �ӵ�
-	private float _initialY; // �ʱ� Y��ǥ
-	private float _targetY; // 7��ŭ ������ ��ǥ Y��ǥ
-	private bool _isPlayerOnPlatform = false; // �÷��̾ ���� ���� �ִ��� ����
-	private bool _isMoving = false; // ���� �̵� ����
+	[SerializeField] private float _descentSpeed = 5f; 
+	private float _initialY;
+	private float _targetY; 
+	private bool _isPlayerOnPlatform = false; 
+	private bool _isMoving = false; 
 	private Rigidbody _rb;
 
 	private ParticleSystem[] _dust;
@@ -20,25 +20,20 @@ public class PlatformController : MonoBehaviour
 	[SerializeField] private float _breakingSfxMaxVolume;
 	[SerializeField] private AudioClip _breakingSfx;
 	private AudioSource _audioSource;
-
-
-	// �÷����� ���� ��ġ�� �����ϱ� ���� ����
 	private Vector3 _previousPosition;
 
 	void Start()
 	{
-		_initialY = transform.position.y; // �ʱ� Y��ǥ ����
-		_targetY = _initialY - 7f; // ��ǥ Y��ǥ ���
+		_initialY = transform.position.y; 
+		_targetY = _initialY - 5f; 
 
-		// Rigidbody ������Ʈ �������� �Ǵ� �߰�
 		_rb = GetComponent<Rigidbody>();
 		if (_rb == null)
 		{
 			_rb = gameObject.AddComponent<Rigidbody>();
-			_rb.isKinematic = true; // Kinematic���� ����
+			_rb.isKinematic = true; 
 		}
 
-		// Rigidbody ���� Ȱ��ȭ (�� �ε巯�� �������� ����)
 		_rb.interpolation = RigidbodyInterpolation.Interpolate;
 
 		_previousPosition = _rb.position;
