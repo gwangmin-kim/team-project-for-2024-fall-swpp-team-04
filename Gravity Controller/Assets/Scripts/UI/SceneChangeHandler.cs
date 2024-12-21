@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 
 public class SceneChangeHandler : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class SceneChangeHandler : MonoBehaviour
 
 	private void Awake()
 	{
-		Object.DontDestroyOnLoad(this.gameObject);
+		UnityEngine.Object.DontDestroyOnLoad(this.gameObject);
 	}
 
 	public void LoadGame()
@@ -54,7 +55,7 @@ public class SceneChangeHandler : MonoBehaviour
 				// Yes
 			}
 		}
-
+		PlayerPrefs.SetString("GameStartTime", DateTime.Now.ToString());
 		_loadingCanvas.SetActive(true);
 		_textCanvas.SetActive(false);
 		_loadingCanvas.GetComponent<LoadingCanvas>().StartLoading();
@@ -90,6 +91,7 @@ public class SceneChangeHandler : MonoBehaviour
 
 	public void ContinueGameWithoutAlert()
 	{
+		PlayerPrefs.SetString("GameStartTime", DateTime.Now.ToString());
 		_loadingCanvas.SetActive(true);
 		_textCanvas.SetActive(false);
 		_loadingCanvas.GetComponent<LoadingCanvas>().StartLoading();

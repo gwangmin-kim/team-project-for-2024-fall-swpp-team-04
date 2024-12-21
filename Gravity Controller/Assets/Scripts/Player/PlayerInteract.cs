@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
-    private const float InteractiveRange = 5f;
+    private const float InteractiveRange = 8f;
     
     public void CheckInteraction() {
         Transform cameraTransform = PlayerCamera.Camera.transform;
