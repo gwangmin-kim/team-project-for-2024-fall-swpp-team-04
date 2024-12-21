@@ -92,7 +92,7 @@ MonoBehaviour:
   _chaseRangeHorizontal: 300
   _chaseRangeVertical: 300
   _sightRange: 300
-  _awarenessCoolDown: 3
+  _awarenessCoolDown: 0.5
   _rotationSpeed: 10
   _attackRangeHorizontal: 10
   _attackRangeVertical: 10
@@ -104,7 +104,7 @@ MonoBehaviour:
   _minGunAngleDegree: 70
   _maxGunAngleDegree: 120
   _adjustingAimAngleRatio: 0.7
-  _maxHp: 3
+  _maxHp: 6
   _fallingSpeed: 50
   _minHeight: 0.2
   _deathFallSpeed: 20

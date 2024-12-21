@@ -115,10 +115,10 @@ MonoBehaviour:
   _changeDirectionIntervalMin: 2
   _changeDirectionIntervalMax: 3
   _chaseSpeed: 7
-  _chaseRange: 15
+  _chaseRange: 100
   _attackRange: 1.5
   _attackHitRange: 2
-  _sightRange: 15
+  _sightRange: 100
   _awarenessCoolDown: 0.5
   _frontOffset: 0.35
   _attackAnimationLength: 1.25

@@ -284,7 +284,6 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 		_attackSuccess = success;
 	}
 
-	// Modified Follow method to include obstacle detection and prevent state transitions
 	private void Follow()
 	{
 		if (_isAttacking)
@@ -295,48 +294,32 @@ public class WalkingEnemy : MonoBehaviour, IEnemy, IAttackReceiver
 		Vector3 directionToLastSeen = _lastSeenPosition - transform.position;
 		Vector3 directionToLastSeenHorizontal = new Vector3(directionToLastSeen.x, 0, directionToLastSeen.z).normalized;
 
-		// Raycast to detect obstacles in the follow direction
 		RaycastHit hit;
 		Vector3 rayOrigin = transform.position + _heightOffset * Vector3.up + _frontOffset * transform.forward;
+
 		if (Physics.Raycast(rayOrigin, directionToLastSeenHorizontal, out hit, _obstacleDetectionRange))
 		{
 			if (!hit.collider.gameObject.CompareTag("Player"))
 			{
-				// Obstacle detected, change direction
 				Debug.Log("Obstacle detected while following: " + hit.collider.name);
-				SetRandomDirection();
-				SetRandomInterval();
-				_timer = 0f;
+
+				directionToLastSeenHorizontal = Quaternion.Euler(0, Random.Range(30, 60) * (Random.value > 0.5f ? 1 : -1), 0) * directionToLastSeenHorizontal;
 			}
 		}
 
-		// Rotate smoothly towards the last seen position
 		Quaternion targetRotationHorizontal = Quaternion.LookRotation(directionToLastSeenHorizontal);
 		transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationHorizontal, Time.fixedDeltaTime * _rotationSpeed);
 
-		Vector3 movementDirection;
-		if (hit.collider != null && !hit.collider.gameObject.CompareTag("Player"))
-		{
-			movementDirection = _currentDirection;
-		}
-		else
-		{
-			movementDirection = directionToLastSeenHorizontal;
-		}
+		transform.Translate(directionToLastSeenHorizontal * _chaseSpeed * Time.fixedDeltaTime, Space.World);
 
-		// Move towards the target direction
-		Vector3 movement = movementDirection * _chaseSpeed * Time.fixedDeltaTime;
-		transform.Translate(movement, Space.World);
-		// Update spawn point to current position to keep the enemy within wander range
 		float distanceToPlayer = new Vector3(transform.position.x - _player.transform.position.x, 0, transform.position.z - _player.transform.position.z).magnitude;
 
 		if (distanceToPlayer < _attackRange)
 		{
 			Attack();
-			return;
 		}
-		_spawnPoint = transform.position;
 	}
+
 
 	private void OnDrawGizmosSelected()
 	{
